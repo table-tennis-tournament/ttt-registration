@@ -1,11 +1,11 @@
-package com.tt.tournament.registration
+package com.tt.tournament
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class TournamentRegistrationApplication
+class TttRegistrationApplication
 
 fun main(args: Array<String>) {
-	runApplication<TournamentRegistrationApplication>(*args)
+	runApplication<TttRegistrationApplication>(*args)
 }
