@@ -10,10 +10,11 @@ import javax.sql.DataSource
 @Configuration
 class DBConfiguration {
 
-    @Bean
-    fun createH2Datasource(): DataSource {
-        return EmbeddedDatabaseBuilder()
-            .setType(EmbeddedDatabaseType.H2)
-            .build()
-    }
+//    @Bean
+//    fun createH2Datasource(): DataSource {
+//        return EmbeddedDatabaseBuilder()
+//            .setType(EmbeddedDatabaseType.H2)
+//            .addScript("db/create-tables.sql")
+//            .build()
+//    }
 }

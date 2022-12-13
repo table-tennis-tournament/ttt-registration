@@ -25,7 +25,7 @@ class SimpleReportExporter{
 
         val exportConfig = SimplePdfExporterConfiguration()
         exportConfig.metadataAuthor = "baeldung"
-        exportConfig.isEncrypted = true
+//        exportConfig.isEncrypted = true
         exportConfig.setAllowedPermissionsHint("PRINTING")
 
         exporter.setConfiguration(reportConfig)
