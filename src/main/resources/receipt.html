@@ -69,15 +69,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td class="first-last-column" th:text="${number1}"></td>
-        <td th:text="${discipline1}"></td>
-        <td class="first-last-column right-text-alignment" th:text="${price1}"></td>
-    </tr>
-    <tr>
-        <td class="first-last-column" th:text="${number2}"></td>
-        <td th:text="${discipline2}"></td>
-        <td class="first-last-column right-text-alignment" th:text="${price2}"></td>
+    <tr th:each="discipline, iStat: ${disciplines}">
+        <td class="first-last-column" th:text="${iStat.index + 1}"></td>
+        <td th:text="${discipline.name}"></td>
+        <td class="first-last-column right-text-alignment" th:text="${discipline.price}"></td>
     </tr>
     <tr>
         <td class="first-last-column" colspan="2">Summe:</td>

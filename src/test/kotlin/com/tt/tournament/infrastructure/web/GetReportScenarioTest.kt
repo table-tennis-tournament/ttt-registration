@@ -15,8 +15,16 @@ class GetReportScenarioTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
     //@Sql("/db/create-tables.sql")
-    fun `Assert report created and loaded`() {
-        val entity = restTemplate.getForEntity("/reports", String::class.java)
+    fun `Assert sunday report created and loaded`() {
+        val entity = restTemplate.getForEntity("/sunday-report", String::class.java)
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(entity.body).isNull()
+    }
+
+    @Test
+    //@Sql("/db/create-tables.sql")
+    fun `Assert saturday report created and loaded`() {
+        val entity = restTemplate.getForEntity("/saturday-report", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
     }

@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.RestController
 class ReportingController(val reportService: ReportService) {
 
 
-    @GetMapping("/reports")
-    fun getReport() {
-        reportService.generateReport()
+    @GetMapping("/sunday-report")
+    fun getSundayReport() {
+        reportService.generateSundayReport()
+    }
+
+    @GetMapping("/saturday-report")
+    fun getSaturdayReport() {
+        reportService.generateSaturdayReport()
     }
 
 }

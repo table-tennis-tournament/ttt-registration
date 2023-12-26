@@ -31,6 +31,30 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
 
     }
 
+    fun readAllPlayersForSaturday() : List<Player> {
+        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
+                    "                FROM typeperplayer tp, player P, type t, club c " +
+                    "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
+                    "                and c.Club_ID = P.Play_Club_ID" +
+                    "                and t.Type_ID < 20" +
+                    "                order by P.Play_Club_ID, P.Play_LastName"
+
+        val result = jdbcClient.sql(sql)
+            .query(this::mapToPlayer)
+        val resultMap = HashMap<Number, Player>()
+        for (player in result) {
+            if(resultMap.contains(player.id)) {
+                val existingEntry = resultMap[player.id]
+                existingEntry?.addDisciplines(player.disciplines)
+                continue
+            }
+            resultMap[player.id] = player
+        }
+        return resultMap.values.toList()
+
+
+    }
+
     fun mapToPlayer(resultSet: ResultSet) : List<Player> {
         val result = mutableListOf<Player>()
         while(resultSet.next()) {

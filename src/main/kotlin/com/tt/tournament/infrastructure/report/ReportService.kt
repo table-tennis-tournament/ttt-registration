@@ -19,10 +19,16 @@ private const val IMAGE_BASE_64 =
 @Service
 class ReportService(val playerRepository: PlayerRepository) {
 
-    public fun generateReport() {
+    fun generateSundayReport() {
         val players = playerRepository.readAllPlayersForSunday()
         val resultList = players.map { x -> parseThymeleafTemplate(x) }
-        generatePdfFromHtml(resultList);
+        generatePdfFromHtml(resultList, "quittungen_sonntag.pdf");
+    }
+
+    fun generateSaturdayReport() {
+        val players = playerRepository.readAllPlayersForSaturday()
+        val resultList = players.map { x -> parseThymeleafTemplate(x) }
+        generatePdfFromHtml(resultList, "quittungen_samstag.pdf");
     }
 
     private fun parseThymeleafTemplate(player: Player): String {
@@ -35,12 +41,10 @@ class ReportService(val playerRepository: PlayerRepository) {
         context.setVariable("base64Image", IMAGE_BASE_64)
         context.setVariable("name", player.name)
         context.setVariable("club", player.club)
+        context.setVariable("disciplines", player.disciplines)
         var index = 1;
         var sum = 0;
         for (discipline in player.disciplines) {
-            context.setVariable("number$index", "$index")
-            context.setVariable("discipline$index", discipline.name)
-            context.setVariable("price$index", "${discipline.price}€")
             sum += discipline.price.toInt()
             index++
         }
@@ -48,8 +52,8 @@ class ReportService(val playerRepository: PlayerRepository) {
         return templateEngine.process("receipt", context)
     }
 
-    fun generatePdfFromHtml(html: List<String>) {
-        val outputFolder = (System.getProperty("user.home") + File.separator) + "thymeleaf2.pdf"
+    private fun generatePdfFromHtml(html: List<String>, fileName: String) {
+        val outputFolder = (System.getProperty("user.home") + File.separator) + fileName
         println(System.getProperty("user.home"))
         val outputStream: OutputStream = FileOutputStream(outputFolder)
         val renderer = ITextRenderer()
