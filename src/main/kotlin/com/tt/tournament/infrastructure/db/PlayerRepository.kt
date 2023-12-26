@@ -22,18 +22,30 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
         return jdbcClient.sql(sql)
             .params("typeId", 20)
             .query(this::mapToPlayer)
+            .associate { it.id to it }
+//            { existing, new ->
+//                existing.discipline = kotlin.collections.mutableListOf(existing.discipline, new.discipline)
+//                return player1
+//            }
+            .values
+            .stream()
+            .toList()
+
     }
 
     fun mapToPlayer(resultSet: ResultSet) : List<Player> {
         val result = mutableListOf<Player>()
         while(resultSet.next()) {
+            val id = resultSet.getInt("Play_ID")
             val firstName = resultSet.getString("Play_FirstName")
             val lastName = resultSet.getString("Play_LastName")
             val clubName = resultSet.getString("Club_Name")
             val typeId = resultSet.getInt("Type_ID")
             val typeName = resultSet.getString("Type_Name")
             val price = resultSet.getInt("Type_StartGebuehr")
-            result.add(Player(String.format("%s %s", firstName, lastName), clubName, Discipline(typeId, typeName, price)))
+            val paid = resultSet.getInt("typl_paid")
+            val discipline = Discipline(typeId, typeName, price, paid)
+            result.add(Player(id, String.format("%s %s", firstName, lastName), clubName, mutableListOf(discipline)))
         }
         return result
     }
