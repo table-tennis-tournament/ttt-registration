@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid #000;
+            padding: 2px;
+        }
+
+        .first-last-column {
+            width: 20%;
+        }
+
+        .padding-bottom {
+            padding-bottom: 15px;
+        }
+
+        .center-text-alignment {
+            text-align: center;
+        }
+
+        .right-text-alignment {
+            text-align: right;
+        }
+
+        .margin-bottom {
+            margin-bottom: 10px;
+        }
+        @page {
+            size: 10.5cm 14.8cm;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td><h2 class="center-text-alignment">
+            <span th:text="'52. Albgauturnier Turnierkarte'"></span>
+        </h2>
+        </td>
+        <td class="first-last-column">
+            <img th:src="'data:image/png;base64,' + ${base64Image}" alt="Base64 Image"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="center-text-alignment" colspan="2">Dieser Beleg gilt als Quittung zur Vorlage bei ihrem Verein!</td>
+    </tr>
+</table>
+<div class="margin-bottom">
+    <table class="custom-table padding-bottom">
+        <tr>
+            <td class="center-text-alignment">Fritz Meier</td>
+        </tr>
+        <tr>
+            <td class="center-text-alignment">TTV Grün weiss Ettlingen</td>
+        </tr>
+    </table>
+</div>
+<table class="custom-table margin-bottom">
+    <thead>
+    <tr>
+        <th class="first-last-column">Nr.</th>
+        <th>Konkurrenz</th>
+        <th class="first-last-column right-text-alignment">Gebühr</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="first-last-column">1.</td>
+        <td>Herren B</td>
+        <td class="first-last-column right-text-alignment">11</td>
+    </tr>
+    <tr>
+        <td class="first-last-column">2.</td>
+        <td>Herren C</td>
+        <td class="first-last-column right-text-alignment">11</td>
+    </tr>
+    <tr>
+        <td class="first-last-column" colspan="2">Summe:</td>
+        <td class="first-last-column right-text-alignment">22€</td>
+    </tr>
+    </tbody>
+</table>
+<span class="center-text-alignment">Ettlingen, 06.01.2024</span>
+</body>
+</html>

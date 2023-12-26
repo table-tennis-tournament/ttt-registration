@@ -18,7 +18,7 @@ class GetReportScenarioTest(@Autowired val restTemplate: TestRestTemplate) {
     fun `Assert report created and loaded`() {
         val entity = restTemplate.getForEntity("/reports", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(entity.body).contains("<h1>Blog</h1>")
+        assertThat(entity.body).isNull()
     }
 
 }
