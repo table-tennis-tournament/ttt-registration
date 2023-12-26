@@ -14,7 +14,7 @@ import org.springframework.test.context.jdbc.Sql
 class GetReportScenarioTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
-    @Sql("/db/create-tables.sql")
+    //@Sql("/db/create-tables.sql")
     fun `Assert report created and loaded`() {
         val entity = restTemplate.getForEntity("/reports", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)

@@ -21,12 +21,8 @@ class ReportService(val playerRepository: PlayerRepository) {
 
     public fun generateReport() {
         val players = playerRepository.readAllPlayersForSunday()
-        var htmlSites = "";
-        for (player in players) {
-            val receiptsTemplate = parseThymeleafTemplate(player)
-            htmlSites+= receiptsTemplate;
-        }
-        generatePdfFromHtml(htmlSites);
+        val resultList = players.map { x -> parseThymeleafTemplate(x) }
+        generatePdfFromHtml(resultList);
     }
 
     private fun parseThymeleafTemplate(player: Player): String {
@@ -41,10 +37,10 @@ class ReportService(val playerRepository: PlayerRepository) {
         context.setVariable("club", player.club)
         var index = 1;
         var sum = 0;
-        for (discipline in player.discipline) {
+        for (discipline in player.disciplines) {
             context.setVariable("number$index", "$index")
             context.setVariable("discipline$index", discipline.name)
-            context.setVariable("price$index", "${discipline.name}€")
+            context.setVariable("price$index", "${discipline.price}€")
             sum += discipline.price.toInt()
             index++
         }
@@ -52,14 +48,24 @@ class ReportService(val playerRepository: PlayerRepository) {
         return templateEngine.process("receipt", context)
     }
 
-    fun generatePdfFromHtml(html: String?) {
+    fun generatePdfFromHtml(html: List<String>) {
         val outputFolder = (System.getProperty("user.home") + File.separator) + "thymeleaf2.pdf"
         println(System.getProperty("user.home"))
         val outputStream: OutputStream = FileOutputStream(outputFolder)
         val renderer = ITextRenderer()
-        renderer.setDocumentFromString(html)
+
+        renderer.setDocumentFromString(html.get(0))
         renderer.layout()
-        renderer.createPDF(outputStream)
+        renderer.createPDF(outputStream, false)
+
+
+        // each page after the first we add using layout() followed by writeNextDocument()
+        for (i in 1 until html.size) {
+            renderer.setDocumentFromString(html.get(i))
+            renderer.layout()
+            renderer.writeNextDocument()
+        }
+        renderer.finishPDF()
         outputStream.close()
     }
 }
