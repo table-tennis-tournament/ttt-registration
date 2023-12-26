@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
     <style>
         .custom-table {
@@ -13,12 +13,12 @@
             padding: 2px;
         }
 
-        .first-last-column {
-            width: 20%;
+        .margin-bottom {
+            margin-bottom: 40px;
         }
 
-        .padding-bottom {
-            padding-bottom: 15px;
+        .first-last-column {
+            width: 20%;
         }
 
         .center-text-alignment {
@@ -29,16 +29,14 @@
             text-align: right;
         }
 
-        .margin-bottom {
-            margin-bottom: 10px;
-        }
         @page {
             size: 10.5cm 14.8cm;
         }
     </style>
+    <title>Quittung</title>
 </head>
 <body>
-<table>
+<table class="margin-bottom">
     <tr>
         <td><h2 class="center-text-alignment">
             <span th:text="'52. Albgauturnier Turnierkarte'"></span>
@@ -53,12 +51,12 @@
     </tr>
 </table>
 <div class="margin-bottom">
-    <table class="custom-table padding-bottom">
+    <table class="custom-table">
         <tr>
-            <td class="center-text-alignment">Fritz Meier</td>
+            <td class="center-text-alignment" th:text="${name}"></td>
         </tr>
         <tr>
-            <td class="center-text-alignment">TTV Grün weiss Ettlingen</td>
+            <td class="center-text-alignment" th:text="${club}"></td>
         </tr>
     </table>
 </div>
@@ -72,18 +70,18 @@
     </thead>
     <tbody>
     <tr>
-        <td class="first-last-column">1.</td>
-        <td>Herren B</td>
-        <td class="first-last-column right-text-alignment">11</td>
+        <td class="first-last-column" th:text="${number1}"></td>
+        <td th:text="${discipline1}"></td>
+        <td class="first-last-column right-text-alignment" th:text="${price1}"></td>
     </tr>
     <tr>
-        <td class="first-last-column">2.</td>
-        <td>Herren C</td>
-        <td class="first-last-column right-text-alignment">11</td>
+        <td class="first-last-column" th:text="${number2}"></td>
+        <td th:text="${discipline2}"></td>
+        <td class="first-last-column right-text-alignment" th:text="${price2}"></td>
     </tr>
     <tr>
         <td class="first-last-column" colspan="2">Summe:</td>
-        <td class="first-last-column right-text-alignment">22€</td>
+        <td class="first-last-column right-text-alignment" th:text="${sum}"></td>
     </tr>
     </tbody>
 </table>
