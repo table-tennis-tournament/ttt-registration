@@ -6,15 +6,17 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@ActiveProfiles("test")
 class GetReportScenarioTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
-    //@Sql("/db/create-tables.sql")
+    @Sql("/db/create-tables.sql")
     fun `Assert sunday report created and loaded`() {
         val entity = restTemplate.getForEntity("/sunday-report", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
@@ -25,6 +27,14 @@ class GetReportScenarioTest(@Autowired val restTemplate: TestRestTemplate) {
     //@Sql("/db/create-tables.sql")
     fun `Assert saturday report created and loaded`() {
         val entity = restTemplate.getForEntity("/saturday-report", String::class.java)
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(entity.body).isNull()
+    }
+
+    @Test
+    //@Sql("/db/create-tables.sql")
+    fun `Assert lists report created and loaded`() {
+        val entity = restTemplate.getForEntity("/player-lists", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
     }

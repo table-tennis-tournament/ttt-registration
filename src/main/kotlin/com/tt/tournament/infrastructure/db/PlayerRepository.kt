@@ -8,7 +8,7 @@ import java.sql.ResultSet
 class PlayerRepository(val jdbcClient: JdbcClient) {
 
     fun readAllPlayersForSunday() : List<Player> {
-        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
+        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, c.Club_AdresseOrt, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
                     "                FROM typeperplayer tp, player P, type t, club c " +
                     "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
                     "                and c.Club_ID = P.Play_Club_ID" +
@@ -32,7 +32,7 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
     }
 
     fun readAllPlayersForSaturday() : List<Player> {
-        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
+        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, c.Club_AdresseOrt, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
                     "                FROM typeperplayer tp, player P, type t, club c " +
                     "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
                     "                and c.Club_ID = P.Play_Club_ID" +
@@ -51,9 +51,29 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
             resultMap[player.id] = player
         }
         return resultMap.values.toList()
-
-
     }
+
+    fun readPlayersForDiscipline() : Map<Discipline, List<Player>> {
+        val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, c.Club_AdresseOrt, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
+                    "                FROM typeperplayer tp, player P, type t, club c " +
+                    "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
+                    "                and c.Club_ID = P.Play_Club_ID" +
+                    "                order by P.Play_Club_ID, P.Play_LastName"
+
+        val result = jdbcClient.sql(sql)
+            .query(this::mapToPlayer)
+        val resultMap = HashMap<Discipline, List<Player>>()
+        for (player in result) {
+            if(resultMap.contains(player.disciplines[0])) {
+                resultMap[player.disciplines[0]]?.addLast(player)
+                continue
+            }
+            resultMap[player.disciplines[0]] = mutableListOf(player)
+        }
+        return resultMap
+    }
+
+
 
     fun mapToPlayer(resultSet: ResultSet) : List<Player> {
         val result = mutableListOf<Player>()
@@ -62,12 +82,13 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
             val firstName = resultSet.getString("Play_FirstName")
             val lastName = resultSet.getString("Play_LastName")
             val clubName = resultSet.getString("Club_Name")
+            val clubCity = resultSet.getString("Club_AdresseOrt")
             val typeId = resultSet.getInt("Type_ID")
             val typeName = resultSet.getString("Type_Name")
             val price = resultSet.getInt("Type_StartGebuehr")
             val paid = resultSet.getInt("typl_paid")
             val discipline = Discipline(typeId, typeName, price, paid)
-            result.add(Player(id, String.format("%s %s", firstName, lastName), clubName, mutableListOf(discipline)))
+            result.add(Player(id, firstName, lastName, clubName, clubCity, mutableListOf(discipline)))
         }
         return result
     }

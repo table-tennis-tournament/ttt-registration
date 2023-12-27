@@ -1,5 +1,6 @@
 package com.tt.tournament.infrastructure.report
 
+import com.tt.tournament.infrastructure.db.Discipline
 import com.tt.tournament.infrastructure.db.Player
 import com.tt.tournament.infrastructure.db.PlayerRepository
 import org.springframework.stereotype.Service
@@ -31,6 +32,12 @@ class ReportService(val playerRepository: PlayerRepository) {
         generatePdfFromHtml(resultList, "quittungen_samstag.pdf");
     }
 
+    fun generateLists() {
+        val players = playerRepository.readPlayersForDiscipline()
+        val resultList = players.map { x -> parseThymeleafTemplateForLists(x.key, x.value) }
+        generatePdfFromHtml(resultList, "spielerlisten.pdf");
+    }
+
     private fun parseThymeleafTemplate(player: Player): String {
         val templateResolver = ClassLoaderTemplateResolver()
         templateResolver.suffix = ".html"
@@ -39,7 +46,7 @@ class ReportService(val playerRepository: PlayerRepository) {
         templateEngine.setTemplateResolver(templateResolver)
         val context = Context()
         context.setVariable("base64Image", IMAGE_BASE_64)
-        context.setVariable("name", player.name)
+        context.setVariable("name", player.name())
         context.setVariable("club", player.club)
         context.setVariable("disciplines", player.disciplines)
         var index = 1;
@@ -50,6 +57,18 @@ class ReportService(val playerRepository: PlayerRepository) {
         }
         context.setVariable("sum", "$sum€")
         return templateEngine.process("receipt", context)
+    }
+
+    private fun parseThymeleafTemplateForLists(discipline: Discipline, players: List<Player>): String {
+        val templateResolver = ClassLoaderTemplateResolver()
+        templateResolver.suffix = ".html"
+        templateResolver.templateMode = TemplateMode.HTML
+        val templateEngine = TemplateEngine()
+        templateEngine.setTemplateResolver(templateResolver)
+        val context = Context()
+        context.setVariable("players", players.sortedBy { it.lastName })
+        context.setVariable("disciplineName", discipline.name)
+        return templateEngine.process("list", context)
     }
 
     private fun generatePdfFromHtml(html: List<String>, fileName: String) {

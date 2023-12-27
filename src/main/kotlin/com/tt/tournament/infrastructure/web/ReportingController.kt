@@ -19,4 +19,9 @@ class ReportingController(val reportService: ReportService) {
         reportService.generateSaturdayReport()
     }
 
+    @GetMapping("/player-lists")
+    fun getPlayerLists() {
+        reportService.generateLists()
+    }
+
 }
