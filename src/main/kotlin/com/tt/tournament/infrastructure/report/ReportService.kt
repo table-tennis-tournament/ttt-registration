@@ -59,7 +59,7 @@ class ReportService(val playerRepository: PlayerRepository) {
         return templateEngine.process("receipt", context)
     }
 
-    private fun parseThymeleafTemplateForLists(discipline: Discipline, players: List<Player>): String {
+    private fun parseThymeleafTemplateForLists(disciplineName: String, players: List<Player>): String {
         val templateResolver = ClassLoaderTemplateResolver()
         templateResolver.suffix = ".html"
         templateResolver.templateMode = TemplateMode.HTML
@@ -67,7 +67,7 @@ class ReportService(val playerRepository: PlayerRepository) {
         templateEngine.setTemplateResolver(templateResolver)
         val context = Context()
         context.setVariable("players", players.sortedBy { it.lastName })
-        context.setVariable("disciplineName", discipline.name)
+        context.setVariable("disciplineName", disciplineName)
         return templateEngine.process("list", context)
     }
 
