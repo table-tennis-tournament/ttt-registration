@@ -21,6 +21,11 @@
             width: 20%;
         }
 
+        .last-column {
+            width: 10%;
+            height: 20px;
+        }
+
         .center-text-alignment {
             text-align: center;
         }
@@ -72,11 +77,17 @@
     <tr th:each="discipline, iStat: ${disciplines}">
         <td class="first-last-column" th:text="${iStat.index + 1}"></td>
         <td th:text="${discipline.name}"></td>
-        <td class="first-last-column right-text-alignment" th:text="${discipline.price}"></td>
+        <td class="first-last-column right-text-alignment">
+            <img th:if="${discipline.paid == 1}" th:src="'data:image/png;base64,' + ${checkIcon}" alt="Base64 Image"/>
+            <span th:text="${discipline.price} + '€'"></span>
+        </td>
     </tr>
     <tr>
         <td class="first-last-column" colspan="2">Summe:</td>
-        <td class="first-last-column right-text-alignment" th:text="${sum}"></td>
+        <td class="first-last-column right-text-alignment">
+            <img th:if="${allPaid}" th:src="'data:image/png;base64,' + ${checkIcon}" alt="Base64 Image"/>
+            <span th:text="${sum} + '€'"></span>
+        </td>
     </tr>
     </tbody>
 </table>
