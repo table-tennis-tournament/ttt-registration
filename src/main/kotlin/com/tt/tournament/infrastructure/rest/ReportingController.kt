@@ -1,4 +1,4 @@
-package com.tt.tournament.infrastructure.web
+package com.tt.tournament.infrastructure.rest
 
 import com.tt.tournament.infrastructure.report.ReportService
 import org.springframework.web.bind.annotation.GetMapping
