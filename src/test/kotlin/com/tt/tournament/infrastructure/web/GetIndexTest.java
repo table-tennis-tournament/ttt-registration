@@ -21,7 +21,7 @@ class GetIndexTest {
         // given - application is running
         String expectedHtml = """
                 <!DOCTYPE html>
-                <html>
+                <html lang="de">
                 <head>
                     <title>Table Tennis Tournament</title>
                 </head>
