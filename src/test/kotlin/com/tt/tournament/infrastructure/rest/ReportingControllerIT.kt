@@ -1,6 +1,7 @@
 package com.tt.tournament.infrastructure.rest
 
 import com.tt.tournament.infrastructure.db.MariaDBTestDatabase
+import com.tt.tournament.infrastructure.db.TestDataCreator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,8 +17,10 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @Testcontainers
 @Import(MariaDBTestDatabase::class)
 class ReportingControllerIT(
-    @Autowired val restTemplate: TestRestTemplate
+    @Autowired val restTemplate: TestRestTemplate,
+    @Autowired val testDataCreator: TestDataCreator
 ) {
+
 
     @Test
     fun `should generate sunday report successfully`() {
