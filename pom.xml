@@ -16,6 +16,7 @@
     <properties>
         <java.version>21</java.version>
         <kotlin.version>1.9.22</kotlin.version>
+        <flying-saucer-pdf.version>9.13.3</flying-saucer-pdf.version>
     </properties>
     <dependencies>
         <dependency>
@@ -53,12 +54,11 @@
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-pdf</artifactId>
-            <version>9.13.3</version>
+            <version>${flying-saucer-pdf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.3.2</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
