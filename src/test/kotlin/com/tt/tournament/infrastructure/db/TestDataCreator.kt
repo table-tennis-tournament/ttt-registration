@@ -1,27 +1,25 @@
 package com.tt.tournament.infrastructure.db
 
 import jakarta.annotation.PostConstruct
-import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.core.io.ClassPathResource
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator
+import org.springframework.stereotype.Component
 import javax.sql.DataSource
 
-@TestConfiguration
-class H2TestDatabase {
+@Component
+class TestDataCreator {
 
-    private val logger = LoggerFactory.getLogger(H2TestDatabase::class.java)
+    private val logger = LoggerFactory.getLogger(TestDataCreator::class.java)
 
     @Autowired
     private lateinit var dataSource: DataSource
 
     @PostConstruct
-    fun startDatabase() {
-        logger.info("Initializing H2 test database...")
+    fun initializeDatabase() {
+        logger.info("Initializing MariaDB test database...")
         try {
-            // Execute the create-tables.sql and insert-data.sql scripts on the existing datasource
             val populator = ResourceDatabasePopulator()
             populator.addScript(ClassPathResource("db/create-tables.sql"))
             populator.addScript(ClassPathResource("db/insert-data.sql"))
@@ -29,16 +27,10 @@ class H2TestDatabase {
             populator.setIgnoreFailedDrops(true)
             populator.setContinueOnError(true)
             populator.execute(dataSource)
-            logger.info("H2 test database initialized successfully")
+            logger.info("MariaDB test database initialized successfully")
         } catch (e: Exception) {
-            logger.error("Failed to initialize H2 test database", e)
+            logger.error("Failed to initialize MariaDB test database", e)
             throw e
         }
-    }
-
-    @PreDestroy
-    fun shutdownDatabase() {
-        logger.info("Shutting down H2 test database...")
-        // Database will be shut down automatically by Spring
     }
 }
