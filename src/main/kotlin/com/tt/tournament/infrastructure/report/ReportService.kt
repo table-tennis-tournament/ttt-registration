@@ -72,6 +72,11 @@ class ReportService(val playerRepository: PlayerRepository) {
     }
 
     private fun generatePdfFromHtml(html: List<String>, fileName: String) {
+        if (html.isEmpty()) {
+            println("No data to generate PDF for $fileName")
+            return
+        }
+
         val outputFolder = (System.getProperty("user.home") + File.separator) + fileName
         println(System.getProperty("user.home"))
         val outputStream: OutputStream = FileOutputStream(outputFolder)
