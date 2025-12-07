@@ -1,6 +1,5 @@
 package com.tt.tournament.infrastructure.report
 
-import com.tt.tournament.infrastructure.db.Discipline
 import com.tt.tournament.infrastructure.db.Player
 import com.tt.tournament.infrastructure.db.PlayerRepository
 import org.springframework.stereotype.Service
@@ -25,19 +24,19 @@ class ReportService(val playerRepository: PlayerRepository) {
     fun generateSundayReport() {
         val players = playerRepository.readAllPlayersForSunday()
         val resultList = players.map { x -> parseThymeleafTemplate(x) }
-        generatePdfFromHtml(resultList, "quittungen_sonntag.pdf");
+        generatePdfFromHtml(resultList, "quittungen_sonntag.pdf")
     }
 
     fun generateSaturdayReport() {
         val players = playerRepository.readAllPlayersForSaturday()
         val resultList = players.map { x -> parseThymeleafTemplate(x) }
-        generatePdfFromHtml(resultList, "quittungen_samstag.pdf");
+        generatePdfFromHtml(resultList, "quittungen_samstag.pdf")
     }
 
     fun generateLists() {
         val players = playerRepository.readPlayersForDiscipline()
         val resultList = players.map { x -> parseThymeleafTemplateForLists(x.key, x.value) }
-        generatePdfFromHtml(resultList, "spielerlisten.pdf");
+        generatePdfFromHtml(resultList, "spielerlisten.pdf")
     }
 
     private fun parseThymeleafTemplate(player: Player): String {
