@@ -21,9 +21,10 @@ class H2TestDatabase {
     fun startDatabase() {
         logger.info("Initializing H2 test database...")
         try {
-            // Execute the create-tables.sql script on the existing datasource
+            // Execute the create-tables.sql and insert-data.sql scripts on the existing datasource
             val populator = ResourceDatabasePopulator()
             populator.addScript(ClassPathResource("db/create-tables.sql"))
+            populator.addScript(ClassPathResource("db/insert-data.sql"))
             populator.setSeparator(";")
             populator.setIgnoreFailedDrops(true)
             populator.setContinueOnError(true)

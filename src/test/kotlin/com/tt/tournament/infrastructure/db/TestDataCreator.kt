@@ -22,6 +22,7 @@ class TestDataCreator {
         try {
             val populator = ResourceDatabasePopulator()
             populator.addScript(ClassPathResource("db/create-tables.sql"))
+            populator.addScript(ClassPathResource("db/insert-data.sql"))
             populator.setSeparator(";")
             populator.setIgnoreFailedDrops(true)
             populator.setContinueOnError(true)
