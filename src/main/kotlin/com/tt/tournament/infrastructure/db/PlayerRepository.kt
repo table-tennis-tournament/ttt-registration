@@ -53,7 +53,7 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
         return resultMap.values.toList()
     }
 
-    fun readPlayersForDiscipline() : Map<String, List<Player>> {
+    fun readPlayersForDiscipline() : Map<String, MutableList<Player>> {
         val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, c.Club_AdresseOrt, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
                     "                FROM typeperplayer tp, player P, type t, club c " +
                     "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
@@ -62,10 +62,10 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
 
         val result = jdbcClient.sql(sql)
             .query(this::mapToPlayer)
-        val resultMap = HashMap<String, List<Player>>()
+        val resultMap = HashMap<String, MutableList<Player>>()
         for (player in result) {
             if(resultMap.contains(player.disciplines[0].name)) {
-                resultMap[player.disciplines[0].name]?.addLast(player)
+                resultMap[player.disciplines[0].name]?.add(player)
                 continue
             }
             resultMap[player.disciplines[0].name] = mutableListOf(player)

@@ -1,9 +1,9 @@
 package com.tt.tournament.infrastructure.db
 
-data class Player(val id: Number, val firstName: String, val lastName: String, val club: String, val clubCity: String?, var disciplines: List<Discipline>){
+data class Player(val id: Number, val firstName: String, val lastName: String, val club: String, val clubCity: String?, var disciplines: MutableList<Discipline>){
     fun addDisciplines(disciplinesToAdd: List<Discipline>): Player {
         for (disciplineToAdd in disciplinesToAdd) {
-            this.disciplines.addLast(disciplineToAdd);
+            this.disciplines.add(disciplineToAdd);
         }
         return this
     }
