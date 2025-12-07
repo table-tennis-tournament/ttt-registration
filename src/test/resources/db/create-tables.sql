@@ -633,5 +633,24 @@ CREATE TABLE IF NOT EXISTS `typeperplayer`
 
 -- Exportiere Daten aus Tabelle test.typeperplayer: ~398 rows (ungefähr)
 
+-- Exportiere Struktur von Tabelle test.users
+CREATE TABLE IF NOT EXISTS `users`
+(
+    `username` varchar(50)  NOT NULL,
+    `password` varchar(100) NOT NULL,
+    `enabled`  tinyint(1)   NOT NULL DEFAULT 1,
+    PRIMARY KEY (`username`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb3;
+
+-- Exportiere Struktur von Tabelle test.authorities
+CREATE TABLE IF NOT EXISTS `authorities`
+(
+    `username`  varchar(50) NOT NULL,
+    `authority` varchar(50) NOT NULL,
+    UNIQUE KEY `authorities_idx_1` (`username`, `authority`),
+    CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb3;
 
 

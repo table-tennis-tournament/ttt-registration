@@ -21,10 +21,11 @@ class ReportingControllerIT(
     @Autowired val testDataCreator: TestDataCreator
 ) {
 
+    private val authenticatedClient = restTemplate.withBasicAuth("admin", "password")
 
     @Test
     fun `should generate sunday report successfully`() {
-        val entity = restTemplate.getForEntity("/sunday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity("/sunday-report", String::class.java)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
@@ -32,7 +33,7 @@ class ReportingControllerIT(
 
     @Test
     fun `should generate saturday report successfully`() {
-        val entity = restTemplate.getForEntity("/saturday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity("/saturday-report", String::class.java)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
@@ -40,7 +41,7 @@ class ReportingControllerIT(
 
     @Test
     fun `should generate player lists successfully`() {
-        val entity = restTemplate.getForEntity("/player-lists", String::class.java)
+        val entity = authenticatedClient.getForEntity("/player-lists", String::class.java)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()

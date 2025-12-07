@@ -20,23 +20,28 @@ class GetIndexTest {
 
     @Test
     void givenApplicationStarted_whenGetIndex_thenReturnsHtmlPage() {
-        // given - application is running
-        String expectedHtml = """
-                <!DOCTYPE html>
-                <html lang="de">
-                <head>
-                    <title>Table Tennis Tournament</title>
-                </head>
-                <body>
-                    <h1>Table Tennis Tournament Registration</h1>
-                </body>
-                </html>""";
+        // given - application is running with authenticated user
+        TestRestTemplate authenticatedClient = restTestClient.withBasicAuth("admin", "password");
+
+        // when - we request the index page
+        var response = authenticatedClient.getForEntity("/", String.class);
+
+        // then - we get an HTML page with status 200
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("Table Tennis Tournament Registration");
+        assertThat(response.getBody()).contains("Welcome,");
+        assertThat(response.getBody()).contains("admin");
+    }
+
+    @Test
+    void givenUnauthenticated_whenGetIndex_thenRedirectsToLogin() {
+        // given - application is running without authentication
 
         // when - we request the index page
         var response = restTestClient.getForEntity("/", String.class);
 
-        // then - we get an HTML page with status 200
+        // then - we get redirected to login page
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualToIgnoringWhitespace(expectedHtml);
+        assertThat(response.getBody()).contains("Login");
     }
 }

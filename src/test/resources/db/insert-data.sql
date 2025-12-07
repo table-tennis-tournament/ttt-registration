@@ -2545,3 +2545,11 @@ VALUES (1, 54, 1, 0, 0, 0, '2019-01-03 18:21:45', 0, 'PLAYER1'),
        (397, 126, 8, 0, 0, 0, '2019-10-25 17:22:00', 0, NULL),
        (398, 127, 8, 0, 0, 0, '2019-10-25 17:22:00', 0, NULL);
 
+
+-- Insert test user (username: admin, password: password)
+INSERT INTO `users` (`username`, `password`, `enabled`)
+VALUES ('admin', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 1);
+
+INSERT INTO `authorities` (`username`, `authority`)
+VALUES ('admin', 'ROLE_USER'),
+       ('admin', 'ROLE_ADMIN');

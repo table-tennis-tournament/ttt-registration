@@ -1,9 +1,53 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Table Tennis Tournament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #007bff;
+        }
+        .user-info {
+            font-weight: bold;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-button {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
-    <h1>Table Tennis Tournament Registration</h1>
+    <div class="header">
+        <div>
+            <h1>Table Tennis Tournament Registration</h1>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <span class="user-info">Welcome, <span sec:authentication="name"></span>!</span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <p>You are now logged in and can access the tournament registration system.</p>
+    </div>
 </body>
 </html>

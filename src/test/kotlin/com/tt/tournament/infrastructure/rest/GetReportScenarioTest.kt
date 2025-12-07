@@ -20,24 +20,26 @@ class GetReportScenarioTest(
     @Autowired val restTemplate: TestRestTemplate
 ) {
 
+    private val authenticatedClient = restTemplate.withBasicAuth("admin", "password")
+
     @Test
     @Disabled("Fix sunday and saturday separation")
     fun `Assert sunday report created and loaded`() {
-        val entity = restTemplate.getForEntity("/sunday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity("/sunday-report", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
     }
 
     @Test
     fun `Assert saturday report created and loaded`() {
-        val entity = restTemplate.getForEntity("/saturday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity("/saturday-report", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
     }
 
     @Test
     fun `Assert lists report created and loaded`() {
-        val entity = restTemplate.getForEntity("/player-lists", String::class.java)
+        val entity = authenticatedClient.getForEntity("/player-lists", String::class.java)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
     }
