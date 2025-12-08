@@ -262,3 +262,4 @@ AND c.Club_ID = P.Play_Club_ID
 This is a business rule encoded in repository queries, not database constraints.
 - Always write tests before you start implementing. Do a TDD approach
 - Write the test in BDD given when then format. Use the `` functionality from kotlin for method naming
+- Always add tests for happy and unhappy paths to verify functionality.

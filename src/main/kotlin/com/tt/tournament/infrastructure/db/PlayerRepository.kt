@@ -96,6 +96,16 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
 
 
 
+    fun updatePaymentStatus(playerId: Number, paid: Boolean): Int {
+        val paidValue = if (paid) 1 else 0
+        val sql = "UPDATE typeperplayer SET typl_paid = :paid WHERE typl_play_id = :playerId"
+
+        return jdbcClient.sql(sql)
+            .param("paid", paidValue)
+            .param("playerId", playerId)
+            .update()
+    }
+
     fun mapToPlayer(resultSet: ResultSet) : List<Player> {
         val result = mutableListOf<Player>()
         while(resultSet.next()) {

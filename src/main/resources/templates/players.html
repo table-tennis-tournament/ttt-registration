@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Players Overview - Table Tennis Tournament</title>
     <style>
         body {
@@ -84,7 +86,7 @@
         .paid-checkbox {
             width: 20px;
             height: 20px;
-            pointer-events: none;
+            cursor: pointer;
         }
         .total-amount {
             text-align: right;
@@ -203,7 +205,10 @@
                     <td class="disciplines" th:text="${player.disciplinesAsString()}">Discipline 1, Discipline 2</td>
                     <td class="total-amount" th:text="${player.totalAmount() + ' €'}">100 €</td>
                     <td>
-                        <input type="checkbox" class="paid-checkbox" th:checked="${player.isFullyPaid()}" disabled>
+                        <input type="checkbox"
+                               class="paid-checkbox"
+                               th:checked="${player.isFullyPaid()}"
+                               th:attr="data-player-id=${player.id}">
                     </td>
                 </tr>
             </tbody>
@@ -217,6 +222,11 @@
             const tbody = table.getElementsByTagName('tbody')[0];
             const noResults = document.getElementById('noResults');
 
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            // Filter functionality
             filterInput.addEventListener('input', function() {
                 const filterValue = this.value.toLowerCase().trim();
                 const rows = tbody.getElementsByTagName('tr');
@@ -251,6 +261,51 @@
                     noResults.style.display = 'none';
                     table.style.display = 'table';
                 }
+            });
+
+            // Payment checkbox functionality
+            const checkboxes = document.querySelectorAll('.paid-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const playerId = parseInt(this.getAttribute('data-player-id'));
+                    const paid = this.checked;
+
+                    // Disable checkbox while updating
+                    this.disabled = true;
+
+                    // Send update request
+                    fetch('/players/payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [csrfHeader]: csrfToken
+                        },
+                        body: JSON.stringify({
+                            playerId: playerId,
+                            paid: paid
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Payment status updated successfully');
+                        } else {
+                            alert('Failed to update payment status: ' + data.message);
+                            // Revert checkbox state on failure
+                            this.checked = !paid;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating payment status:', error);
+                        alert('Error updating payment status. Please try again.');
+                        // Revert checkbox state on error
+                        this.checked = !paid;
+                    })
+                    .finally(() => {
+                        // Re-enable checkbox
+                        this.disabled = false;
+                    });
+                });
             });
         });
     </script>
