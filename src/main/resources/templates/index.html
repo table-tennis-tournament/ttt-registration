@@ -32,6 +32,21 @@
         .logout-button:hover {
             background-color: #c82333;
         }
+        .nav-links {
+            margin-top: 20px;
+        }
+        .nav-links a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +63,9 @@
     </div>
     <div>
         <p>You are now logged in and can access the tournament registration system.</p>
+        <div class="nav-links">
+            <a th:href="@{/players}">View All Players</a>
+        </div>
     </div>
 </body>
 </html>
