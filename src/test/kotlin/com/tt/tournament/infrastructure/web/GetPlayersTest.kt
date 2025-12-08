@@ -115,4 +115,20 @@ class GetPlayersTest {
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).contains("Players Overview")
     }
+
+    @Test
+    fun `Given authenticated user when get players page then contains filter input box`() {
+        // given - application is running with authenticated user
+        val authenticatedClient = restTestClient.withBasicAuth("admin", "password")
+
+        // when - we request the players page
+        val response = authenticatedClient.getForEntity("/players", String::class.java)
+
+        // then - we get an HTML page with filter input box
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).contains("Filter by First Name, Last Name, or Club:")
+        assertThat(response.body).contains("id=\"playerFilter\"")
+        assertThat(response.body).contains("Type to filter players...")
+        assertThat(response.body).contains("No players found matching your search")
+    }
 }

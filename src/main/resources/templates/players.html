@@ -94,6 +94,38 @@
             max-width: 300px;
             word-wrap: break-word;
         }
+        .filter-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .filter-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 3px;
+        }
+        .filter-input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -115,7 +147,17 @@
 
     <div>
         <h2>All Registered Players</h2>
-        <table>
+
+        <div class="filter-container">
+            <label for="playerFilter" class="filter-label">Filter by First Name, Last Name, or Club:</label>
+            <input type="text" id="playerFilter" class="filter-input" placeholder="Type to filter players..." autocomplete="off">
+        </div>
+
+        <div id="noResults" class="no-results">
+            No players found matching your search.
+        </div>
+
+        <table id="playersTable">
             <thead>
                 <tr>
                     <th>
@@ -167,5 +209,50 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInput = document.getElementById('playerFilter');
+            const table = document.getElementById('playersTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const noResults = document.getElementById('noResults');
+
+            filterInput.addEventListener('input', function() {
+                const filterValue = this.value.toLowerCase().trim();
+                const rows = tbody.getElementsByTagName('tr');
+                let visibleCount = 0;
+
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const cells = row.getElementsByTagName('td');
+
+                    if (cells.length >= 3) {
+                        const firstName = cells[0].textContent.toLowerCase();
+                        const lastName = cells[1].textContent.toLowerCase();
+                        const club = cells[2].textContent.toLowerCase();
+
+                        // Check if any of the fields contain the filter value
+                        if (firstName.includes(filterValue) ||
+                            lastName.includes(filterValue) ||
+                            club.includes(filterValue)) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                }
+
+                // Show/hide no results message
+                if (visibleCount === 0 && filterValue !== '') {
+                    noResults.style.display = 'block';
+                    table.style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    table.style.display = 'table';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
