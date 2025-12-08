@@ -36,12 +36,45 @@ mvn clean package -DskipTests
 # Run with Maven
 mvn spring-boot:run
 
+# Run with local profile (uses Docker Compose MariaDB)
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+
 # Run with production profile (requires MariaDB)
 mvn spring-boot:run -Dspring-boot.run.profiles=default
 
 # Run with test profile (uses H2 in-memory database)
 mvn spring-boot:run -Dspring-boot.run.profiles=test
 ```
+
+### Local Development with Docker Compose
+The project includes Docker Compose support for local development with MariaDB:
+
+```bash
+# Start MariaDB with Docker Compose (manual)
+docker compose up -d
+
+# Run application with local profile (auto-starts Docker Compose)
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+
+# Stop Docker Compose
+docker compose down
+```
+
+**IntelliJ IDEA Setup:**
+1. Open Run/Debug Configurations
+2. Add new Spring Boot configuration
+3. Set Main class: `com.tt.tournament.TttRegistrationApplicationKt`
+4. Set Active profiles: `local`
+5. Spring Boot will automatically start/stop Docker Compose when running
+
+**Docker Compose Configuration:**
+- Database: `ttvettlingen24`
+- Username: `ttt`
+- Password: `ttt`
+- Port: `3306`
+- Init scripts loaded from `src/test/resources/db/`:
+  - `create-tables.sql` - Database schema
+  - `insert-data.sql` - Test data
 
 ### Docker
 ```bash
@@ -227,3 +260,5 @@ AND c.Club_ID = P.Play_Club_ID
 - Sunday disciplines: `Type_ID > 20`
 
 This is a business rule encoded in repository queries, not database constraints.
+- Always write tests before you start implementing. Do a TDD approach
+- Write the test in BDD given when then format. Use the `` functionality from kotlin for method naming
