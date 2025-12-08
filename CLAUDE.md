@@ -236,7 +236,7 @@ GitHub Actions workflow (`.github/workflows/build-and-docker.yml`):
 - `DOCKERHUB_USERNAME`
 - `DOCKERHUB_TOKEN`
 
-**Trigger Branches**: `main`, `develop` (plus PRs to main)
+**Trigger Branches**: `main` (plus PRs to main)
 
 ## Database Schema Notes
 
