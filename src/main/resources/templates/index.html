@@ -52,22 +52,22 @@
 <body>
     <div class="header">
         <div>
-            <h1>Table Tennis Tournament Registration</h1>
+            <h1>Albgauturnier Kassenbuch</h1>
         </div>
         <div sec:authorize="isAuthenticated()">
-            <span class="user-info">Welcome, <span sec:authentication="name"></span>!</span>
+            <span class="user-info">Hallo, <span sec:authentication="name"></span>!</span>
             <form th:action="@{/logout}" method="post" class="logout-form">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         </div>
     </div>
     <div>
-        <p>You are now logged in and can access the tournament registration system.</p>
+        <p>Was möchtest du tun?</p>
         <div class="nav-links">
-            <a th:href="@{/players}">View All Players</a>
-            <a th:href="@{/import}">Import Tournament Data</a>
-            <a th:href="@{/saturday-report}">Print Saturday Report</a>
-            <a th:href="@{/sunday-report}">Print Sunday Report</a>
+            <a th:href="@{/players}">Alle Spieler</a>
+            <a th:href="@{/import}">Importiere Turnier Daten</a>
+            <a th:href="@{/saturday-report}">Samstag Quittungen</a>
+            <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
         </div>
     </div>
 </body>

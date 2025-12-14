@@ -28,8 +28,8 @@ class GetIndexTest {
 
         // then - we get an HTML page with status 200
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("Table Tennis Tournament Registration");
-        assertThat(response.getBody()).contains("Welcome,");
+        assertThat(response.getBody()).contains("Was möchtest du tun?");
+        assertThat(response.getBody()).contains("Hallo,");
         assertThat(response.getBody()).contains("admin");
     }
 
