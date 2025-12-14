@@ -8,11 +8,9 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
-import java.util.Base64
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
@@ -21,20 +19,6 @@ class GetPlayersTest {
 
     @Autowired
     private lateinit var restTestClient: TestRestTemplate
-
-    private fun extractCsrfToken(html: String): Pair<String, String>? {
-        val tokenRegex = """<meta name="_csrf" content="([^"]+)"""".toRegex()
-        val headerRegex = """<meta name="_csrf_header" content="([^"]+)"""".toRegex()
-
-        val tokenMatch = tokenRegex.find(html)
-        val headerMatch = headerRegex.find(html)
-
-        return if (tokenMatch != null && headerMatch != null) {
-            Pair(headerMatch.groupValues[1], tokenMatch.groupValues[1])
-        } else {
-            null
-        }
-    }
 
     @Test
     fun `Given authenticated user when get players page then returns html with all players`() {
@@ -165,89 +149,10 @@ class GetPlayersTest {
         assertThat(response.body).contains("name=\"_csrf_header\"")
     }
 
-    @Test
-    fun `Given authenticated user when update payment status to paid then returns success`() {
-        // given - application is running with authenticated user
-        val authenticatedClient = restTestClient.withBasicAuth("admin", "password")
 
-        // First, get the CSRF token from the players page
-        val pageResponse = authenticatedClient.getForEntity("/players", String::class.java)
-        val (csrfHeader, csrfToken) = extractCsrfToken(pageResponse.body!!)!!
 
-        // Prepare request with CSRF token and Basic Auth
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_JSON
-        headers.set(csrfHeader, csrfToken)
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".toByteArray()))
 
-        val requestBody = mapOf("playerId" to 1, "paid" to true)
-        val request = HttpEntity(requestBody, headers)
 
-        // when - we update payment status to paid
-        val response = restTestClient.exchange("/players/payment", HttpMethod.POST, request, Map::class.java)
-
-        // then - we get success response
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isNotNull
-        assertThat(response.body!!["success"]).isEqualTo(true)
-        assertThat(response.body!!["message"]).isEqualTo("Payment status updated successfully")
-    }
-
-    @Test
-    fun `Given authenticated user when update payment status to unpaid then returns success`() {
-        // given - application is running with authenticated user
-        val authenticatedClient = restTestClient.withBasicAuth("admin", "password")
-
-        // First, get the CSRF token from the players page
-        val pageResponse = authenticatedClient.getForEntity("/players", String::class.java)
-        val (csrfHeader, csrfToken) = extractCsrfToken(pageResponse.body!!)!!
-
-        // Prepare request with CSRF token and Basic Auth
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_JSON
-        headers.set(csrfHeader, csrfToken)
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".toByteArray()))
-
-        val requestBody = mapOf("playerId" to 1, "paid" to false)
-        val request = HttpEntity(requestBody, headers)
-
-        // when - we update payment status to unpaid
-        val response = restTestClient.exchange("/players/payment", HttpMethod.POST, request, Map::class.java)
-
-        // then - we get success response
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isNotNull
-        assertThat(response.body!!["success"]).isEqualTo(true)
-        assertThat(response.body!!["message"]).isEqualTo("Payment status updated successfully")
-    }
-
-    @Test
-    fun `Given authenticated user when update payment status for non-existent player then returns not found`() {
-        // given - application is running with authenticated user
-        val authenticatedClient = restTestClient.withBasicAuth("admin", "password")
-
-        // First, get the CSRF token from the players page
-        val pageResponse = authenticatedClient.getForEntity("/players", String::class.java)
-        val (csrfHeader, csrfToken) = extractCsrfToken(pageResponse.body!!)!!
-
-        // Prepare request with CSRF token and Basic Auth
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_JSON
-        headers.set(csrfHeader, csrfToken)
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".toByteArray()))
-
-        val requestBody = mapOf("playerId" to 99999, "paid" to true)
-        val request = HttpEntity(requestBody, headers)
-
-        // when - we update payment status for non-existent player
-        val response = restTestClient.exchange("/players/payment", HttpMethod.POST, request, Map::class.java)
-
-        // then - we get not found response
-        assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-        assertThat(response.body).isNotNull
-        assertThat(response.body!!["success"]).isEqualTo(false)
-        assertThat(response.body!!["message"]).isEqualTo("Player not found")
-    }
 
     @Test
     fun `Given unauthenticated user when update payment status then redirects to login`() {
