@@ -8,6 +8,7 @@ import org.thymeleaf.context.Context
 import org.thymeleaf.templatemode.TemplateMode
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.xhtmlrenderer.pdf.ITextRenderer
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -31,6 +32,18 @@ class ReportService(val playerRepository: PlayerRepository) {
         val players = playerRepository.readAllPlayersForSaturday()
         val resultList = players.map { x -> parseThymeleafTemplate(x) }
         generatePdfFromHtml(resultList, "quittungen_samstag.pdf")
+    }
+
+    fun generateSundayReportBytes(): ByteArray {
+        val players = playerRepository.readAllPlayersForSunday()
+        val resultList = players.map { x -> parseThymeleafTemplate(x) }
+        return generatePdfBytesFromHtml(resultList)
+    }
+
+    fun generateSaturdayReportBytes(): ByteArray {
+        val players = playerRepository.readAllPlayersForSaturday()
+        val resultList = players.map { x -> parseThymeleafTemplate(x) }
+        return generatePdfBytesFromHtml(resultList)
     }
 
     fun generateLists() {
@@ -94,5 +107,30 @@ class ReportService(val playerRepository: PlayerRepository) {
         }
         renderer.finishPDF()
         outputStream.close()
+    }
+
+    private fun generatePdfBytesFromHtml(html: List<String>): ByteArray {
+        if (html.isEmpty()) {
+            println("No data to generate PDF")
+            return ByteArray(0)
+        }
+
+        val outputStream = ByteArrayOutputStream()
+        val renderer = ITextRenderer()
+
+        renderer.setDocumentFromString(html.get(0))
+        renderer.layout()
+        renderer.createPDF(outputStream, false)
+
+        // each page after the first we add using layout() followed by writeNextDocument()
+        for (i in 1 until html.size) {
+            renderer.setDocumentFromString(html.get(i))
+            renderer.layout()
+            renderer.writeNextDocument()
+        }
+        renderer.finishPDF()
+        outputStream.close()
+
+        return outputStream.toByteArray()
     }
 }

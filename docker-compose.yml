@@ -1,0 +1,21 @@
+services:
+  mariadb:
+    image: mariadb:11.6
+    container_name: ttt-registration-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: ttvettlingen24
+      MARIADB_USER: ttt
+      MARIADB_PASSWORD: ttt
+    ports:
+      - "3306:3306"
+    volumes:
+      # Mount init scripts - MariaDB executes .sql files in alphabetical order
+      - ./src/test/resources/db/create-tables.sql:/docker-entrypoint-initdb.d/01-create-tables.sql
+      - ./src/test/resources/db/insert-users.sql:/docker-entrypoint-initdb.d/02-insert-users.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

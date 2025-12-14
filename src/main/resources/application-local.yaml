@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/ttvettlingen24
+    username: ttt
+    password: ttt
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
+      lifecycle-management: start_and_stop

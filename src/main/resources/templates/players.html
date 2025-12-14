@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Players Overview - Table Tennis Tournament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            font-weight: bold;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-button {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+        .nav-links {
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+        th:hover {
+            background-color: #0056b3;
+        }
+        th a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        th .sort-arrow {
+            float: right;
+            font-size: 12px;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        .paid-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .total-amount {
+            text-align: right;
+            font-weight: bold;
+        }
+        .disciplines {
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+        .filter-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .filter-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 3px;
+        }
+        .filter-input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Players Overview</h1>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <span class="user-info">Welcome, <span sec:authentication="name"></span>!</span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a th:href="@{/}">Home</a>
+    </div>
+
+    <div>
+        <h2>All Registered Players</h2>
+
+        <div class="filter-container">
+            <label for="playerFilter" class="filter-label">Filter by First Name, Last Name, or Club:</label>
+            <input type="text" id="playerFilter" class="filter-input" placeholder="Type to filter players..." autocomplete="off">
+        </div>
+
+        <div id="noResults" class="no-results">
+            No players found matching your search.
+        </div>
+
+        <table id="playersTable">
+            <thead>
+                <tr>
+                    <th>
+                        <a th:href="@{/players(sortBy='firstName', order=${sortBy == 'firstName' and order == 'asc' ? 'desc' : 'asc'})}">
+                            First Name
+                            <span class="sort-arrow" th:if="${sortBy == 'firstName'}" th:text="${order == 'asc' ? '▲' : '▼'}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/players(sortBy='lastName', order=${sortBy == 'lastName' and order == 'asc' ? 'desc' : 'asc'})}">
+                            Last Name
+                            <span class="sort-arrow" th:if="${sortBy == 'lastName'}" th:text="${order == 'asc' ? '▲' : '▼'}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/players(sortBy='club', order=${sortBy == 'club' and order == 'asc' ? 'desc' : 'asc'})}">
+                            Club
+                            <span class="sort-arrow" th:if="${sortBy == 'club'}" th:text="${order == 'asc' ? '▲' : '▼'}"></span>
+                        </a>
+                    </th>
+                    <th class="disciplines">
+                        Disciplines
+                    </th>
+                    <th>
+                        <a th:href="@{/players(sortBy='totalAmount', order=${sortBy == 'totalAmount' and order == 'asc' ? 'desc' : 'asc'})}">
+                            Payment Amount
+                            <span class="sort-arrow" th:if="${sortBy == 'totalAmount'}" th:text="${order == 'asc' ? '▲' : '▼'}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/players(sortBy='paid', order=${sortBy == 'paid' and order == 'asc' ? 'desc' : 'asc'})}">
+                            Paid
+                            <span class="sort-arrow" th:if="${sortBy == 'paid'}" th:text="${order == 'asc' ? '▲' : '▼'}"></span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="player : ${players}">
+                    <td th:text="${player.firstName}">John</td>
+                    <td th:text="${player.lastName}">Doe</td>
+                    <td th:text="${player.club}">Club Name</td>
+                    <td class="disciplines" th:text="${player.disciplinesAsString()}">Discipline 1, Discipline 2</td>
+                    <td class="total-amount" th:text="${player.totalAmount() + ' €'}">100 €</td>
+                    <td>
+                        <input type="checkbox"
+                               class="paid-checkbox"
+                               th:checked="${player.isFullyPaid()}"
+                               th:attr="data-player-id=${player.id}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInput = document.getElementById('playerFilter');
+            const table = document.getElementById('playersTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const noResults = document.getElementById('noResults');
+
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            // Filter functionality
+            filterInput.addEventListener('input', function() {
+                const filterValue = this.value.toLowerCase().trim();
+                const rows = tbody.getElementsByTagName('tr');
+                let visibleCount = 0;
+
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const cells = row.getElementsByTagName('td');
+
+                    if (cells.length >= 3) {
+                        const firstName = cells[0].textContent.toLowerCase();
+                        const lastName = cells[1].textContent.toLowerCase();
+                        const club = cells[2].textContent.toLowerCase();
+
+                        // Check if any of the fields contain the filter value
+                        if (firstName.includes(filterValue) ||
+                            lastName.includes(filterValue) ||
+                            club.includes(filterValue)) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                }
+
+                // Show/hide no results message
+                if (visibleCount === 0 && filterValue !== '') {
+                    noResults.style.display = 'block';
+                    table.style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    table.style.display = 'table';
+                }
+            });
+
+            // Payment checkbox functionality
+            const checkboxes = document.querySelectorAll('.paid-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const playerId = parseInt(this.getAttribute('data-player-id'));
+                    const paid = this.checked;
+
+                    // Disable checkbox while updating
+                    this.disabled = true;
+
+                    // Send update request
+                    fetch('/players/payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [csrfHeader]: csrfToken
+                        },
+                        body: JSON.stringify({
+                            playerId: playerId,
+                            paid: paid
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Payment status updated successfully');
+                        } else {
+                            alert('Failed to update payment status: ' + data.message);
+                            // Revert checkbox state on failure
+                            this.checked = !paid;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating payment status:', error);
+                        alert('Error updating payment status. Please try again.');
+                        // Revert checkbox state on error
+                        this.checked = !paid;
+                    })
+                    .finally(() => {
+                        // Re-enable checkbox
+                        this.disabled = false;
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

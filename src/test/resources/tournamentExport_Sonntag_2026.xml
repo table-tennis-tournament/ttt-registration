@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tournament SYSTEM "https://liga.nu/dtd/TournamentPortal.dtd">
+<tournament end-date="2026-01-04" name="54. Ettlinger Albgau Tischtennis-Turnier für Damen und Erwachsene" winning-sets="3" table-count="24" multiple-participations-same-day="true" multiple-participations-same-time="true" start-date="2026-01-04" tournament-type="offenes Turnier" tournament-id="wxbpSFHJMQ9fxCdl%2B2dLH5tClATFLQ71">
+	
+		<tournament-location city="Ettlingen " zip-code="76275" name="Albgauhalle in Ettlingen" street="Middelkerker Straße (Parkplatz)"/> 
+	
+	
+		<competition start-date="2026-01-04 08:30" ttr-from="0" ttr-to="1500" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" max-persons="72" sex="gemischt" ttr-remarks="D" age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 08:30" ttr-from="0" ttr-to="1500" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" sex="gemischt" ttr-remarks="D" age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 09:30" ttr-from="1501" ttr-to="1900" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" max-persons="66" sex="gemischt" ttr-remarks="B" age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 09:30" ttr-from="1501" ttr-to="1900" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" sex="gemischt" ttr-remarks="B" age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 12:30" age-group="Damen" final-round-playmode="Einfaches K.-o.-System" age-from="2017" max-persons="20" sex="weiblich" ttr-remarks=" " age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER1">
+						<person licence-nr="60415" lastname="Schmidt" club-name="TTG 1947 Walldorf" restricted-data-processing="false" sex="0" ttr-match-count="0" region="Heidelberg" club-federation-nickname="BaTTV" ttr="1509" internal-nr="NU445116" foreigner-eq-state="false" firstname="Nicole" nationality="DE" club-nr="335" birthyear="1975" sub-region=""/>
+						 
+					</player>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 12:30" age-group="Damen" final-round-playmode="Einfaches K.-o.-System" age-from="2017" sex="weiblich" ttr-remarks=" " age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 14:00" ttr-from="0" ttr-to="1700" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" max-persons="84" sex="gemischt" ttr-remarks="C" age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 14:00" ttr-from="0" ttr-to="1700" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" sex="gemischt" ttr-remarks="C" age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 16:30" ttr-from="1701" ttr-to="3000" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" max-persons="42" sex="gemischt" ttr-remarks="A" age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-04 16:30" ttr-from="1701" ttr-to="3000" age-group="Erwachsene" final-round-playmode="Einfaches K.-o.-System" age-from="2017" sex="gemischt" ttr-remarks="A" age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+</tournament>

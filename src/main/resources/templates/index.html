@@ -1,9 +1,74 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Table Tennis Tournament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #007bff;
+        }
+        .user-info {
+            font-weight: bold;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-button {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+        .nav-links {
+            margin-top: 20px;
+        }
+        .nav-links a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Table Tennis Tournament Registration</h1>
+    <div class="header">
+        <div>
+            <h1>Albgauturnier Kassenbuch</h1>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <span class="user-info">Hallo, <span sec:authentication="name"></span>!</span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <p>Was möchtest du tun?</p>
+        <div class="nav-links">
+            <a th:href="@{/players}">Alle Spieler</a>
+            <a th:href="@{/import}">Importiere Turnier Daten</a>
+            <a th:href="@{/saturday-report}">Samstag Quittungen</a>
+            <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
+        </div>
+    </div>
 </body>
 </html>
