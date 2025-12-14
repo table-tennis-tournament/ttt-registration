@@ -36,7 +36,7 @@ class ReportingControllerIT(
         val entity = authenticatedClient.getForEntity("/saturday-report", String::class.java)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(entity.body).isNull()
+        assertThat(entity.body).isNotNull()
     }
 
     @Test

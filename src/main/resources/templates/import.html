@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Import Tournament Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            font-weight: bold;
+        }
+        .nav-links {
+            margin: 20px 0;
+        }
+        .nav-links a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
+        .upload-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .file-input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 3px;
+        }
+        .upload-button {
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .upload-button:hover {
+            background-color: #218838;
+        }
+        .upload-button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .progress {
+            display: none;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .result.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .summary-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        .summary-table th,
+        .summary-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .error-list {
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error-item {
+            padding: 5px;
+            margin: 5px 0;
+            background-color: #fff3cd;
+            border-left: 3px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Import Tournament Data</h1>
+        <div sec:authorize="isAuthenticated()">
+            <span class="user-info">Welcome, <span sec:authentication="name"></span>!</span>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/players}">View Players</a>
+    </div>
+
+    <div class="upload-container">
+        <h2>Upload Tournament XML File</h2>
+        <p>Select an XML file exported from liga.nu tournament system to import player and competition data.</p>
+
+        <form class="upload-form" id="uploadForm">
+            <input type="file"
+                   id="fileInput"
+                   name="file"
+                   accept=".xml,text/xml,application/xml"
+                   class="file-input"
+                   required>
+
+            <button type="submit" id="uploadButton" class="upload-button">
+                Import XML Data
+            </button>
+
+            <div id="progress" class="progress">
+                Processing import...
+            </div>
+        </form>
+
+        <div id="result" class="result">
+            <h3 id="resultTitle"></h3>
+            <p id="resultMessage"></p>
+
+            <table id="summaryTable" class="summary-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryBody">
+                </tbody>
+            </table>
+
+            <div id="errorList" class="error-list" style="display: none;">
+                <h4>Errors:</h4>
+                <div id="errors"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('uploadForm');
+            const fileInput = document.getElementById('fileInput');
+            const uploadButton = document.getElementById('uploadButton');
+            const progress = document.getElementById('progress');
+            const result = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const summaryTable = document.getElementById('summaryTable');
+            const summaryBody = document.getElementById('summaryBody');
+            const errorList = document.getElementById('errorList');
+            const errors = document.getElementById('errors');
+
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert('Please select a file');
+                    return;
+                }
+
+                // Validate file size (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be less than 10MB');
+                    return;
+                }
+
+                // Show progress, disable button
+                uploadButton.disabled = true;
+                progress.style.display = 'block';
+                result.style.display = 'none';
+
+                // Create form data
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/import/tournament-xml', {
+                        method: 'POST',
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    // Hide progress
+                    progress.style.display = 'none';
+
+                    // Display results
+                    result.style.display = 'block';
+                    result.className = 'result ' + (data.success ? 'success' : 'error');
+                    resultTitle.textContent = data.success ? 'Import Successful' : 'Import Failed';
+                    resultMessage.textContent = data.message;
+
+                    // Display summary if available
+                    if (data.summary) {
+                        summaryTable.style.display = 'table';
+                        summaryBody.innerHTML = `
+                            <tr><td>Players Imported (New)</td><td>${data.summary.playersImported}</td></tr>
+                            <tr><td>Players Updated (Existing)</td><td>${data.summary.playersUpdated}</td></tr>
+                            <tr><td>Clubs Created</td><td>${data.summary.clubsCreated}</td></tr>
+                            <tr><td>Competitions Matched</td><td>${data.summary.competitionsMatched}</td></tr>
+                            <tr><td>Competitions Created (New)</td><td>${data.summary.competitionsCreated}</td></tr>
+                            <tr><td>Enrollments Created</td><td>${data.summary.enrollmentsCreated}</td></tr>
+                            <tr><td>Duplicates Skipped</td><td>${data.summary.duplicatesSkipped}</td></tr>
+                        `;
+                    } else {
+                        summaryTable.style.display = 'none';
+                    }
+
+                    // Display errors if any
+                    if (data.errors && data.errors.length > 0) {
+                        errorList.style.display = 'block';
+                        errors.innerHTML = data.errors.map(err =>
+                            `<div class="error-item">${err}</div>`
+                        ).join('');
+                    } else {
+                        errorList.style.display = 'none';
+                    }
+
+                } catch (error) {
+                    progress.style.display = 'none';
+                    result.style.display = 'block';
+                    result.className = 'result error';
+                    resultTitle.textContent = 'Error';
+                    resultMessage.textContent = 'Failed to upload file: ' + error.message;
+                    summaryTable.style.display = 'none';
+                    errorList.style.display = 'none';
+                } finally {
+                    uploadButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

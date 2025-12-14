@@ -109,6 +109,135 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
             .update()
     }
 
+    // XML Import Extension Methods
+
+    fun findByLicenseNr(licenseNr: String): PlayerEntity? {
+        val sql = """
+            SELECT Play_ID, Play_FirstName, Play_LastName, Play_LicenseNr,
+                   Play_Club_ID, Play_Sex, Play_Nationality, Play_TTR
+            FROM player
+            WHERE Play_LicenseNr = :licenseNr
+        """
+        return jdbcClient.sql(sql)
+            .param("licenseNr", licenseNr)
+            .query { rs, _ -> mapToPlayerEntity(rs) }
+            .optional()
+            .orElse(null)
+    }
+
+    fun createPlayer(
+        firstName: String,
+        lastName: String,
+        licenseNr: String,
+        clubId: Int,
+        sex: String?,
+        nationality: String?,
+        ttr: Double?,
+        birthYear: String?
+    ): Int {
+        val sql = """
+            INSERT INTO player
+            (Play_FirstName, Play_LastName, Play_LicenseNr, Play_Club_ID,
+             Play_Sex, Play_Nationality, Play_TTR, Play_BirthDate)
+            VALUES (:firstName, :lastName, :licenseNr, :clubId,
+                    :sex, :nationality, :ttr, :birthDate)
+        """
+
+        val birthDate = birthYear?.let { "$it-01-01 00:00:00" }
+
+        jdbcClient.sql(sql)
+            .param("firstName", firstName)
+            .param("lastName", lastName)
+            .param("licenseNr", licenseNr)
+            .param("clubId", clubId)
+            .param("sex", sex)
+            .param("nationality", nationality)
+            .param("ttr", ttr)
+            .param("birthDate", birthDate)
+            .update()
+
+        val lastIdSql = "SELECT LAST_INSERT_ID() as id"
+        return jdbcClient.sql(lastIdSql)
+            .query { rs, _ -> rs.getInt("id") }
+            .single()
+    }
+
+    fun updatePlayer(
+        playerId: Int,
+        firstName: String,
+        lastName: String,
+        clubId: Int,
+        sex: String?,
+        nationality: String?,
+        ttr: Double?,
+        birthYear: String?
+    ): Int {
+        val sql = """
+            UPDATE player
+            SET Play_FirstName = :firstName,
+                Play_LastName = :lastName,
+                Play_Club_ID = :clubId,
+                Play_Sex = :sex,
+                Play_Nationality = :nationality,
+                Play_TTR = :ttr,
+                Play_BirthDate = :birthDate
+            WHERE Play_ID = :playerId
+        """
+
+        val birthDate = birthYear?.let { "$it-01-01 00:00:00" }
+
+        return jdbcClient.sql(sql)
+            .param("playerId", playerId)
+            .param("firstName", firstName)
+            .param("lastName", lastName)
+            .param("clubId", clubId)
+            .param("sex", sex)
+            .param("nationality", nationality)
+            .param("ttr", ttr)
+            .param("birthDate", birthDate)
+            .update()
+    }
+
+    fun isPlayerEnrolledInType(playerId: Int, typeId: Int): Boolean {
+        val sql = """
+            SELECT COUNT(*) as count
+            FROM typeperplayer
+            WHERE typl_play_id = :playerId
+            AND typl_type_id = :typeId
+        """
+        val count = jdbcClient.sql(sql)
+            .param("playerId", playerId)
+            .param("typeId", typeId)
+            .query { rs, _ -> rs.getInt("count") }
+            .single()
+        return count > 0
+    }
+
+    fun enrollPlayerInType(playerId: Int, typeId: Int, paid: Int = 0): Int {
+        val sql = """
+            INSERT INTO typeperplayer (typl_play_id, typl_type_id, typl_seed, typl_paid)
+            VALUES (:playerId, :typeId, 0, :paid)
+        """
+        return jdbcClient.sql(sql)
+            .param("playerId", playerId)
+            .param("typeId", typeId)
+            .param("paid", paid)
+            .update()
+    }
+
+    private fun mapToPlayerEntity(rs: ResultSet): PlayerEntity {
+        return PlayerEntity(
+            id = rs.getInt("Play_ID"),
+            firstName = rs.getString("Play_FirstName"),
+            lastName = rs.getString("Play_LastName"),
+            licenseNr = rs.getString("Play_LicenseNr"),
+            clubId = rs.getInt("Play_Club_ID"),
+            sex = rs.getString("Play_Sex"),
+            nationality = rs.getString("Play_Nationality"),
+            ttr = rs.getDouble("Play_TTR")
+        )
+    }
+
     fun mapToPlayer(resultSet: ResultSet) : List<Player> {
         val result = mutableListOf<Player>()
         while(resultSet.next()) {
@@ -127,3 +256,14 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
         return result
     }
 }
+
+data class PlayerEntity(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val licenseNr: String?,
+    val clubId: Int,
+    val sex: String?,
+    val nationality: String?,
+    val ttr: Double?
+)
