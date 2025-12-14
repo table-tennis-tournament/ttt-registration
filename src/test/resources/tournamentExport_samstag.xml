@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tournament SYSTEM "https://liga.nu/dtd/TournamentPortal.dtd">
+<tournament end-date="2026-01-03" name="54. Ettlinger Albgau Tischtennis-Turnier für Nachwuchs und Senioren 40 / 50   " winning-sets="3" table-count="24" multiple-participations-same-day="true" multiple-participations-same-time="true" start-date="2026-01-03" tournament-type="offenes Turnier" tournament-id="vPDN8Ey3BW69JmcBtq5aukaRK7fE4pW2">
+	
+		<tournament-location city="Ettlingen " zip-code="76275" name="Albgauhalle in Ettlingen" street="Middelkerker Straße (Parkplatz)"/> 
+	
+	
+		<competition start-date="2026-01-03 09:30" ttr-from="1001" ttr-to="1400" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="gemischt" ttr-remarks="B" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 09:30" ttr-from="1001" ttr-to="1400" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="gemischt" ttr-remarks="B" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 09:30" ttr-from="1001" ttr-to="1400" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="weiblich" ttr-remarks="B" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 09:30" ttr-from="1001" ttr-to="1400" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="weiblich" ttr-remarks="B" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 10:30" ttr-from="0" ttr-to="1000" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="gemischt" ttr-remarks="D" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 10:30" ttr-from="0" ttr-to="1000" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="gemischt" ttr-remarks="D" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 10:30" ttr-from="0" ttr-to="1000" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="weiblich" ttr-remarks="D" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 10:30" ttr-from="0" ttr-to="1000" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="weiblich" ttr-remarks="D" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 11:30" age-group="Senioren 40" final-round-playmode="Einfaches K.-o.-System" age-from="1986" max-persons="64" sex="gemischt" ttr-remarks=" " age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER1">
+						<person licence-nr="1080" lastname="Fritsche" club-name="Post SV Chemnitz" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Chemnitz" club-federation-nickname="STTV" internal-nr="NU1387477" foreigner-eq-state="false" firstname="Thomas" nationality="DE" club-nr="4110" birthyear="1974" sub-region="Chemnitz"/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER2">
+						<person licence-nr="105144" lastname="Kopp" club-name="TTV Edenkoben" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Vorderpfalz-Süd" club-federation-nickname="PTTV" internal-nr="NU1237719" foreigner-eq-state="false" firstname="Christian" nationality="DE" club-nr="042" birthyear="1986" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER3">
+						<person licence-nr="9983" lastname="Mayer" club-name="TV Oberhausen " restricted-data-processing="false" sex="1" ttr-match-count="0" region="Bruchsal" club-federation-nickname="BaTTV" internal-nr="NU434764" foreigner-eq-state="false" firstname="Peter" nationality="DE" club-nr="124" birthyear="1954" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER4">
+						<person licence-nr="60415" lastname="Schmidt" club-name="TTG 1947 Walldorf" restricted-data-processing="false" sex="0" ttr-match-count="0" region="Heidelberg" club-federation-nickname="BaTTV" ttr="1509" internal-nr="NU445116" foreigner-eq-state="false" firstname="Nicole" nationality="DE" club-nr="335" birthyear="1975" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER5">
+						<person licence-nr="109728" lastname="Stumpf" club-name="TV Colgenstein-Heidesheim" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Vorderpfalz-Nord" club-federation-nickname="PTTV" internal-nr="NU1247344" foreigner-eq-state="false" firstname="Thorsten" nationality="DE" club-nr="142" birthyear="1978" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER6">
+						<person licence-nr="208878" lastname="Xiao" club-name="TTV Friedrichstal" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Karlsruhe" club-federation-nickname="BaTTV" internal-nr="NU1822681" foreigner-eq-state="true" firstname="Jianjun" nationality="CN" club-nr="411" birthyear="1978" sub-region=""/>
+						 
+					</player>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 11:30" age-group="Senioren 40" final-round-playmode="Einfaches K.-o.-System" age-from="1986" sex="gemischt" ttr-remarks=" " age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 13:30" ttr-from="0" ttr-to="1200" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="gemischt" ttr-remarks="C" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 13:30" ttr-from="0" ttr-to="1200" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="gemischt" ttr-remarks="C" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 13:30" ttr-from="0" ttr-to="1200" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="weiblich" ttr-remarks="C" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 13:30" ttr-from="0" ttr-to="1200" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="weiblich" ttr-remarks="C" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:00" ttr-from="1201" ttr-to="3000" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="gemischt" ttr-remarks="A" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:00" ttr-from="1201" ttr-to="3000" age-group="Jugend 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="gemischt" ttr-remarks="A" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:00" ttr-from="1201" ttr-to="3000" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" max-persons="64" sex="weiblich" ttr-remarks="A" age-to="2007" type="Einzel" entry-fee="8.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:00" ttr-from="1201" ttr-to="3000" age-group="Mädchen 19" final-round-playmode="Einfaches K.-o.-System" age-from="2025" sex="weiblich" ttr-remarks="A" age-to="2007" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:30" age-group="Senioren 50" final-round-playmode="Einfaches K.-o.-System" age-from="1976" max-persons="64" sex="gemischt" ttr-remarks=" " age-to="1905" type="Einzel" entry-fee="13.0" preliminary-round-playmode="Gruppen Jeder gegen jeden">
+			<players>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER7">
+						<person licence-nr="261218" lastname="Babenko" club-name="TTC Karlsruhe-Neureut" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Karlsruhe" club-federation-nickname="BaTTV" internal-nr="NU2341878" foreigner-eq-state="true" firstname="Volodymyr" nationality="UA" club-nr="432" birthyear="1958" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER8">
+						<person licence-nr="1080" lastname="Fritsche" club-name="Post SV Chemnitz" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Chemnitz" club-federation-nickname="STTV" internal-nr="NU1387477" foreigner-eq-state="false" firstname="Thomas" nationality="DE" club-nr="4110" birthyear="1974" sub-region="Chemnitz"/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER9">
+						<person licence-nr="151325" lastname="Gfrörer" club-name="TTF Frankenthal" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Vorderpfalz-Nord" club-federation-nickname="PTTV" internal-nr="NU2393898" foreigner-eq-state="false" firstname="Michael" nationality="DE" club-nr="060" birthyear="1970" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER10">
+						<person licence-nr="55996" lastname="Horner" club-name="TTC Karlsruhe-Neureut" restricted-data-processing="false" sex="1" ttr-match-count="0" region="Karlsruhe" club-federation-nickname="BaTTV" internal-nr="NU441262" foreigner-eq-state="false" firstname="Rudolf" nationality="DE" club-nr="432" birthyear="1948" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER11">
+						<person licence-nr="109890" lastname="Lang" club-name="TTV Ettlingen " restricted-data-processing="false" sex="1" ttr-match-count="0" region="Karlsruhe" club-federation-nickname="BaTTV" internal-nr="NU504185" foreigner-eq-state="false" firstname="Erik" nationality="DE" club-nr="407" birthyear="1971" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER12">
+						<person licence-nr="9983" lastname="Mayer" club-name="TV Oberhausen " restricted-data-processing="false" sex="1" ttr-match-count="0" region="Bruchsal" club-federation-nickname="BaTTV" internal-nr="NU434764" foreigner-eq-state="false" firstname="Peter" nationality="DE" club-nr="124" birthyear="1954" sub-region=""/>
+						 
+					</player>
+				
+					<player waiting-list-player="false" type="single" id="PLAYER13">
+						<person licence-nr="60415" lastname="Schmidt" club-name="TTG 1947 Walldorf" restricted-data-processing="false" sex="0" ttr-match-count="0" region="Heidelberg" club-federation-nickname="BaTTV" ttr="1509" internal-nr="NU445116" foreigner-eq-state="false" firstname="Nicole" nationality="DE" club-nr="335" birthyear="1975" sub-region=""/>
+						 
+					</player>
+				
+			</players>
+		</competition>
+	
+		<competition start-date="2026-01-03 15:30" age-group="Senioren 50" final-round-playmode="Einfaches K.-o.-System" age-from="1976" sex="gemischt" ttr-remarks=" " age-to="1905" type="Doppel" entry-fee="0.0">
+			<players>
+				
+			</players>
+		</competition>
+	
+</tournament>
