@@ -66,6 +66,15 @@
             <artifactId>flying-saucer-pdf</artifactId>
             <version>${flying-saucer-pdf.version}</version>
         </dependency>
+        <!-- JAXB for XML parsing -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
