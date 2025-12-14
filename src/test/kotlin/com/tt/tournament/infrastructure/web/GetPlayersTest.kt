@@ -30,14 +30,14 @@ class GetPlayersTest {
 
         // then - we get an HTML page with status 200
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).contains("Players Overview")
-        assertThat(response.body).contains("All Registered Players")
-        assertThat(response.body).contains("First Name")
-        assertThat(response.body).contains("Last Name")
-        assertThat(response.body).contains("Club")
-        assertThat(response.body).contains("Disciplines")
-        assertThat(response.body).contains("Payment Amount")
-        assertThat(response.body).contains("Paid")
+        assertThat(response.body).contains("Spielerübersicht")
+        assertThat(response.body).contains("Angemeldete Spieler")
+        assertThat(response.body).contains("Vorname")
+        assertThat(response.body).contains("Nachname")
+        assertThat(response.body).contains("Verein")
+        assertThat(response.body).contains("Konkurrenzen")
+        assertThat(response.body).contains("Betrag")
+        assertThat(response.body).contains("Bezahlt")
     }
 
     @Test
@@ -129,10 +129,10 @@ class GetPlayersTest {
 
         // then - we get an HTML page with filter input box
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).contains("Filter by First Name, Last Name, or Club:")
+        assertThat(response.body).contains("Suche nach Vorname, Nachname oder Vereinsname:")
         assertThat(response.body).contains("id=\"playerFilter\"")
         assertThat(response.body).contains("Type to filter players...")
-        assertThat(response.body).contains("No players found matching your search")
+        assertThat(response.body).contains("Keine Spieler gefunden")
     }
 
     @Test
@@ -148,11 +148,6 @@ class GetPlayersTest {
         assertThat(response.body).contains("name=\"_csrf\"")
         assertThat(response.body).contains("name=\"_csrf_header\"")
     }
-
-
-
-
-
 
     @Test
     fun `Given unauthenticated user when update payment status then redirects to login`() {

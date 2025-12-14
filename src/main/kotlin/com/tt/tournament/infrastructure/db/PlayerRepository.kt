@@ -12,7 +12,7 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
                     "                FROM typeperplayer tp, player P, type t, club c " +
                     "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
                     "                and c.Club_ID = P.Play_Club_ID" +
-                    "                and t.Type_ID > 20" +
+                    "                and t.Type_ID > 30" +
                     "                and t.Type_Kind = 1" +
                     "                order by P.Play_Club_ID, P.Play_LastName"
 
@@ -37,7 +37,7 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
                     "                FROM typeperplayer tp, player P, type t, club c " +
                     "                where tp.typl_play_id = P.Play_ID AND t.Type_ID = tp.typl_type_id" +
                     "                and c.Club_ID = P.Play_Club_ID" +
-                    "                and t.Type_ID < 20" +
+                    "                and t.Type_ID < 31" +
                     "                and t.Type_Kind = 1" +
                     "                order by P.Play_Club_ID, P.Play_LastName"
 
