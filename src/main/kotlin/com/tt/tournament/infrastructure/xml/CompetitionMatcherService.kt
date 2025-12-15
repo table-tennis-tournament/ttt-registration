@@ -19,7 +19,7 @@ class CompetitionMatcherService(private val typeRepository: TypeRepository) {
         val type = competition.type.trim()
         val ttrRemarks = competition.ttrRemarks?.trim() ?: ""
 
-        return if (ttrRemarks.isNotEmpty() && ttrRemarks != " ") {
+        return if (ttrRemarks.isNotBlank()) {
             "$ageGroup $ttrRemarks $type"
         } else {
             "$ageGroup $type"
@@ -51,22 +51,4 @@ class CompetitionMatcherService(private val typeRepository: TypeRepository) {
         return newType
     }
 
-    /**
-     * Match competition to existing type by name.
-     * Returns TypeEntity if found, null otherwise.
-     * @deprecated Use matchOrCreateCompetitionType instead
-     */
-    @Deprecated("Use matchOrCreateCompetitionType instead", ReplaceWith("matchOrCreateCompetitionType(competition)"))
-    fun matchCompetitionToType(competition: CompetitionDto): TypeEntity? {
-        val competitionName = buildCompetitionName(competition)
-        val type = typeRepository.findByName(competitionName)
-
-        if (type == null) {
-            logger.warn("No matching type found for competition: $competitionName")
-        } else {
-            logger.debug("Matched competition '$competitionName' to Type_ID: ${type.id}")
-        }
-
-        return type
-    }
 }

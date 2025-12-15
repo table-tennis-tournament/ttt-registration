@@ -175,3 +175,5 @@ target
 .gradle
 README.html
 .exercism
+
+*.env

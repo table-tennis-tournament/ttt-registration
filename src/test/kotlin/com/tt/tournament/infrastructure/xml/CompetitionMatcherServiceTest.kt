@@ -67,22 +67,6 @@ class CompetitionMatcherServiceTest {
         assertThat(name).isEqualTo("Mädchen 19 Doppel")
     }
 
-    @Test
-    fun `Given competition name when matching to type then return TypeEntity if exists`() {
-        // given - assuming we have some test types in the database
-        // This test will depend on the actual test data
-        // For now, let's test the method returns null for non-existent types
-        val competition = CompetitionDto(
-            ageGroup = "Non Existent",
-            type = "Einzel"
-        )
-
-        // when
-        val result = competitionMatcherService.matchCompetitionToType(competition)
-
-        // then
-        assertThat(result).isNull()
-    }
 
     @Test
     fun `Given existing competition when matching or creating then return existing type`() {
