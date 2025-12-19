@@ -102,4 +102,58 @@ class XmlImportController(
             )
         }
     }
+
+    @PostMapping("/import/automatic-saturday-import")
+    fun automaticSaturdayImport(): ResponseEntity<ImportResponse> {
+        return try {
+            logger.info("Starting automatic Saturday tournament import")
+            val response = automaticImportService.importSaturdayTournament()
+
+            // Return appropriate HTTP status
+            val httpStatus = when {
+                response.success -> HttpStatus.OK
+                response.errors.isNotEmpty() -> HttpStatus.PARTIAL_CONTENT
+                else -> HttpStatus.BAD_REQUEST
+            }
+
+            ResponseEntity.status(httpStatus).body(response)
+
+        } catch (e: Exception) {
+            logger.error("Failed to process automatic Saturday tournament import", e)
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ImportResponse(
+                    success = false,
+                    message = "Failed to process Saturday import: ${e.message}",
+                    errors = listOf(e.message ?: "Unknown error")
+                )
+            )
+        }
+    }
+
+    @PostMapping("/import/automatic-sunday-import")
+    fun automaticSundayImport(): ResponseEntity<ImportResponse> {
+        return try {
+            logger.info("Starting automatic Sunday tournament import")
+            val response = automaticImportService.importSundayTournament()
+
+            // Return appropriate HTTP status
+            val httpStatus = when {
+                response.success -> HttpStatus.OK
+                response.errors.isNotEmpty() -> HttpStatus.PARTIAL_CONTENT
+                else -> HttpStatus.BAD_REQUEST
+            }
+
+            ResponseEntity.status(httpStatus).body(response)
+
+        } catch (e: Exception) {
+            logger.error("Failed to process automatic Sunday tournament import", e)
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ImportResponse(
+                    success = false,
+                    message = "Failed to process Sunday import: ${e.message}",
+                    errors = listOf(e.message ?: "Unknown error")
+                )
+            )
+        }
+    }
 }

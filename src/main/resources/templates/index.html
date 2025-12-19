@@ -56,11 +56,17 @@
             background-color: #6c757d;
             cursor: not-allowed;
         }
-        .automatic-import-button {
+        .automatic-import-saturday-button {
             background-color: #28a745 !important;
         }
-        .automatic-import-button:hover {
+        .automatic-import-saturday-button:hover {
             background-color: #218838 !important;
+        }
+        .automatic-import-sunday-button {
+            background-color: #17a2b8 !important;
+        }
+        .automatic-import-sunday-button:hover {
+            background-color: #138496 !important;
         }
         .message {
             margin-top: 20px;
@@ -102,7 +108,8 @@
         <div class="nav-links">
             <a th:href="@{/players}">Alle Spieler</a>
             <a th:href="@{/import}">Importiere Turnier Daten</a>
-            <button id="automaticImportBtn" class="automatic-import-button">Aktualisiere Turnier</button>
+            <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
+            <button id="automaticSundayImportBtn" class="automatic-import-sunday-button">Aktualisiere Sonntag</button>
             <a th:href="@{/saturday-report}">Samstag Quittungen</a>
             <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
         </div>
@@ -111,21 +118,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const automaticImportBtn = document.getElementById('automaticImportBtn');
+            const automaticSaturdayImportBtn = document.getElementById('automaticSaturdayImportBtn');
+            const automaticSundayImportBtn = document.getElementById('automaticSundayImportBtn');
             const messageDiv = document.getElementById('message');
 
             // Get CSRF token
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            automaticImportBtn.addEventListener('click', async function() {
-                // Disable button and show loading message
-                automaticImportBtn.disabled = true;
-                automaticImportBtn.textContent = 'Importiere...';
+            // Helper function to handle import
+            async function handleImport(button, endpoint, buttonText, loadingText) {
+                // Disable both buttons and show loading message
+                automaticSaturdayImportBtn.disabled = true;
+                automaticSundayImportBtn.disabled = true;
+                const originalText = button.textContent;
+                button.textContent = loadingText;
                 messageDiv.style.display = 'none';
 
                 try {
-                    const response = await fetch('/import/automatic-tournament-import', {
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: {
                             [csrfHeader]: csrfToken
@@ -173,10 +184,31 @@
                         <p>Import fehlgeschlagen: ${error.message}</p>
                     `;
                 } finally {
-                    // Re-enable button
-                    automaticImportBtn.disabled = false;
-                    automaticImportBtn.textContent = 'Aktualisiere Turnier';
+                    // Re-enable buttons
+                    automaticSaturdayImportBtn.disabled = false;
+                    automaticSundayImportBtn.disabled = false;
+                    button.textContent = originalText;
                 }
+            }
+
+            // Saturday import button handler
+            automaticSaturdayImportBtn.addEventListener('click', async function() {
+                await handleImport(
+                    automaticSaturdayImportBtn,
+                    '/import/automatic-saturday-import',
+                    'Aktualisiere Samstag',
+                    'Importiere Samstag...'
+                );
+            });
+
+            // Sunday import button handler
+            automaticSundayImportBtn.addEventListener('click', async function() {
+                await handleImport(
+                    automaticSundayImportBtn,
+                    '/import/automatic-sunday-import',
+                    'Aktualisiere Sonntag',
+                    'Importiere Sonntag...'
+                );
             });
         });
     </script>

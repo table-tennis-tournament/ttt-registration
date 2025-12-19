@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.body
+import java.net.URI
 
 @Service
 class AutomaticImportService(
@@ -27,12 +28,66 @@ class AutomaticImportService(
         return combineResults(saturdayResult, sundayResult)
     }
 
+    fun importSaturdayTournament(): ImportResponse {
+        logger.info("Starting automatic Saturday tournament import")
+
+        val saturdayResult = downloadAndImport(importProperties.saturday, "Saturday")
+
+        return when (saturdayResult) {
+            is ImportResult.Success -> ImportResponse(
+                success = true,
+                message = "Saturday tournament imported successfully",
+                summary = saturdayResult.summary,
+                errors = emptyList()
+            )
+            is ImportResult.PartialSuccess -> ImportResponse(
+                success = false,
+                message = "Saturday tournament import completed with errors",
+                summary = saturdayResult.summary,
+                errors = saturdayResult.errors
+            )
+            is ImportResult.Failure -> ImportResponse(
+                success = false,
+                message = "Failed to import Saturday tournament",
+                summary = null,
+                errors = listOf(saturdayResult.errorMessage)
+            )
+        }
+    }
+
+    fun importSundayTournament(): ImportResponse {
+        logger.info("Starting automatic Sunday tournament import")
+
+        val sundayResult = downloadAndImport(importProperties.sunday, "Sunday")
+
+        return when (sundayResult) {
+            is ImportResult.Success -> ImportResponse(
+                success = true,
+                message = "Sunday tournament imported successfully",
+                summary = sundayResult.summary,
+                errors = emptyList()
+            )
+            is ImportResult.PartialSuccess -> ImportResponse(
+                success = false,
+                message = "Sunday tournament import completed with errors",
+                summary = sundayResult.summary,
+                errors = sundayResult.errors
+            )
+            is ImportResult.Failure -> ImportResponse(
+                success = false,
+                message = "Failed to import Sunday tournament",
+                summary = null,
+                errors = listOf(sundayResult.errorMessage)
+            )
+        }
+    }
+
     private fun downloadAndImport(url: String, name: String): ImportResult {
         return try {
             logger.info("Downloading $name tournament data from: $url")
 
             val xmlContent = restClient.get()
-                .uri(url)
+                .uri(URI.create(url))
                 .retrieve()
                 .body<String>()
 
