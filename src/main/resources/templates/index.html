@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Table Tennis Tournament</title>
     <style>
         body {
@@ -35,7 +37,7 @@
         .nav-links {
             margin-top: 20px;
         }
-        .nav-links a {
+        .nav-links a, .nav-links button {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -43,9 +45,49 @@
             border-radius: 3px;
             display: inline-block;
             margin-right: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links button:hover {
             background-color: #0056b3;
+        }
+        .nav-links button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .automatic-import-saturday-button {
+            background-color: #28a745 !important;
+        }
+        .automatic-import-saturday-button:hover {
+            background-color: #218838 !important;
+        }
+        .automatic-import-sunday-button {
+            background-color: #17a2b8 !important;
+        }
+        .automatic-import-sunday-button:hover {
+            background-color: #138496 !important;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .message.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .message.info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
         }
     </style>
 </head>
@@ -66,9 +108,109 @@
         <div class="nav-links">
             <a th:href="@{/players}">Alle Spieler</a>
             <a th:href="@{/import}">Importiere Turnier Daten</a>
+            <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
+            <button id="automaticSundayImportBtn" class="automatic-import-sunday-button">Aktualisiere Sonntag</button>
             <a th:href="@{/saturday-report}">Samstag Quittungen</a>
             <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
         </div>
+        <div id="message" class="message"></div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const automaticSaturdayImportBtn = document.getElementById('automaticSaturdayImportBtn');
+            const automaticSundayImportBtn = document.getElementById('automaticSundayImportBtn');
+            const messageDiv = document.getElementById('message');
+
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            // Helper function to handle import
+            async function handleImport(button, endpoint, buttonText, loadingText) {
+                // Disable both buttons and show loading message
+                automaticSaturdayImportBtn.disabled = true;
+                automaticSundayImportBtn.disabled = true;
+                const originalText = button.textContent;
+                button.textContent = loadingText;
+                messageDiv.style.display = 'none';
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    // Display result message
+                    messageDiv.style.display = 'block';
+
+                    if (data.success) {
+                        messageDiv.className = 'message success';
+                        messageDiv.innerHTML = `
+                            <h3>Import erfolgreich!</h3>
+                            <p>${data.message}</p>
+                            ${data.summary ? `
+                                <ul>
+                                    <li>Neue Spieler: ${data.summary.playersImported}</li>
+                                    <li>Aktualisierte Spieler: ${data.summary.playersUpdated}</li>
+                                    <li>Neue Vereine: ${data.summary.clubsCreated}</li>
+                                    <li>Neue Wettbewerbe: ${data.summary.competitionsCreated}</li>
+                                    <li>Neue Anmeldungen: ${data.summary.enrollmentsCreated}</li>
+                                </ul>
+                            ` : ''}
+                        `;
+                    } else {
+                        messageDiv.className = 'message error';
+                        messageDiv.innerHTML = `
+                            <h3>Import mit Fehlern abgeschlossen</h3>
+                            <p>${data.message}</p>
+                            ${data.errors && data.errors.length > 0 ? `
+                                <ul>
+                                    ${data.errors.map(err => `<li>${err}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        `;
+                    }
+
+                } catch (error) {
+                    messageDiv.style.display = 'block';
+                    messageDiv.className = 'message error';
+                    messageDiv.innerHTML = `
+                        <h3>Fehler</h3>
+                        <p>Import fehlgeschlagen: ${error.message}</p>
+                    `;
+                } finally {
+                    // Re-enable buttons
+                    automaticSaturdayImportBtn.disabled = false;
+                    automaticSundayImportBtn.disabled = false;
+                    button.textContent = originalText;
+                }
+            }
+
+            // Saturday import button handler
+            automaticSaturdayImportBtn.addEventListener('click', async function() {
+                await handleImport(
+                    automaticSaturdayImportBtn,
+                    '/import/automatic-saturday-import',
+                    'Aktualisiere Samstag',
+                    'Importiere Samstag...'
+                );
+            });
+
+            // Sunday import button handler
+            automaticSundayImportBtn.addEventListener('click', async function() {
+                await handleImport(
+                    automaticSundayImportBtn,
+                    '/import/automatic-sunday-import',
+                    'Aktualisiere Sonntag',
+                    'Importiere Sonntag...'
+                );
+            });
+        });
+    </script>
 </body>
 </html>

@@ -17,8 +17,8 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @Testcontainers
 @Import(MariaDBTestDatabase::class)
 class ReportingControllerIT(
-    @Autowired val restTemplate: TestRestTemplate,
-    @Autowired val testDataCreator: TestDataCreator
+    @param:Autowired val restTemplate: TestRestTemplate,
+    @param:Autowired val testDataCreator: TestDataCreator
 ) {
 
     private val authenticatedClient = restTemplate.withBasicAuth("admin", "password")

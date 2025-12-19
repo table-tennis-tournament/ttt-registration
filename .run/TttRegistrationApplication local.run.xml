@@ -1,7 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="TttRegistrationApplication local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="local" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/local.env" />
+    </option>
     <module name="ttt-registration" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.tt.tournament.TttRegistrationApplication" />
     <method v="2">
       <option name="Make" enabled="true" />

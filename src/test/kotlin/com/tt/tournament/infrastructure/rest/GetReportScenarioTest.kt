@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @Import(H2TestDatabase::class)
 class GetReportScenarioTest(
-    @Autowired val restTemplate: TestRestTemplate
+    @param:Autowired val restTemplate: TestRestTemplate
 ) {
 
     private val authenticatedClient = restTemplate.withBasicAuth("admin", "password")
