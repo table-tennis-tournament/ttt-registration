@@ -9,9 +9,6 @@ import org.thymeleaf.templatemode.TemplateMode
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.xhtmlrenderer.pdf.ITextRenderer
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 
 private const val IMAGE_BASE_64 =
@@ -34,10 +31,10 @@ class ReportService(val playerRepository: PlayerRepository) {
         return generatePdfBytesFromHtml(resultList)
     }
 
-    fun generateLists() {
+    fun generatePlayerListsBytes(): ByteArray {
         val players = playerRepository.readPlayersForDiscipline()
         val resultList = players.map { x -> parseThymeleafTemplateForLists(x.key, x.value) }
-        generatePdfFromHtml(resultList, "spielerlisten.pdf")
+        return generatePdfBytesFromHtml(resultList)
     }
 
     private fun parseThymeleafTemplate(player: Player): String {
@@ -69,32 +66,6 @@ class ReportService(val playerRepository: PlayerRepository) {
         context.setVariable("players", players.sortedBy { it.lastName })
         context.setVariable("disciplineName", disciplineName)
         return templateEngine.process("list", context)
-    }
-
-    private fun generatePdfFromHtml(html: List<String>, fileName: String) {
-        if (html.isEmpty()) {
-            println("No data to generate PDF for $fileName")
-            return
-        }
-
-        val outputFolder = (System.getProperty("user.home") + File.separator) + fileName
-        println(System.getProperty("user.home"))
-        val outputStream: OutputStream = FileOutputStream(outputFolder)
-        val renderer = ITextRenderer()
-
-        renderer.setDocumentFromString(html.get(0))
-        renderer.layout()
-        renderer.createPDF(outputStream, false)
-
-
-        // each page after the first we add using layout() followed by writeNextDocument()
-        for (i in 1 until html.size) {
-            renderer.setDocumentFromString(html.get(i))
-            renderer.layout()
-            renderer.writeNextDocument()
-        }
-        renderer.finishPDF()
-        outputStream.close()
     }
 
     private fun generatePdfBytesFromHtml(html: List<String>): ByteArray {

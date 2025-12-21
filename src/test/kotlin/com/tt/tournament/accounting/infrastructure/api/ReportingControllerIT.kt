@@ -7,10 +7,13 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.TestRestTemplate
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
+import org.springframework.boot.resttestclient.getForEntity
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.testcontainers.junit.jupiter.Testcontainers
+import kotlin.collections.take
+import kotlin.collections.toByteArray
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
@@ -25,7 +28,7 @@ class ReportingControllerIT(
 
     @Test
     fun `should generate sunday report successfully`() {
-        val entity = authenticatedClient.getForEntity("/sunday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity<String>("/sunday-report")
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNull()
@@ -33,7 +36,7 @@ class ReportingControllerIT(
 
     @Test
     fun `should generate saturday report successfully`() {
-        val entity = authenticatedClient.getForEntity("/saturday-report", String::class.java)
+        val entity = authenticatedClient.getForEntity<String>("/saturday-report")
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(entity.body).isNotNull()
@@ -41,9 +44,18 @@ class ReportingControllerIT(
 
     @Test
     fun `should generate player lists successfully`() {
-        val entity = authenticatedClient.getForEntity("/player-lists", String::class.java)
+        val entity = authenticatedClient.getForEntity<String>("/player-lists")
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(entity.body).isNull()
+        assertThat(entity.body).isNotNull()
+        assertThat(entity.body).isNotEmpty
+        assertThat(entity.headers.contentType.toString()).contains("application/pdf")
+        assertThat(entity.headers.contentDisposition.toString()).contains("attachment")
+        assertThat(entity.headers.contentDisposition.toString()).contains("spielerliste.pdf")
+
+        // verify PDF magic bytes
+        val pdfMagicBytes = "%PDF-".toByteArray()
+        val actualMagicBytes = entity.body!!.take(5).toByteArray()
+        assertThat(actualMagicBytes).isEqualTo(pdfMagicBytes)
     }
 }

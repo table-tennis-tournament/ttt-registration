@@ -30,8 +30,12 @@ class ReportingController(val reportService: ReportService) {
     }
 
     @GetMapping("/player-lists")
-    fun getPlayerLists() {
-        reportService.generateLists()
+    fun getPlayerLists(): ResponseEntity<ByteArray> {
+        val pdfBytes = reportService.generatePlayerListsBytes()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_PDF
+        headers.setContentDispositionFormData("attachment", "spielerliste.pdf")
+        return ResponseEntity.ok().headers(headers).body(pdfBytes)
     }
 
 }
