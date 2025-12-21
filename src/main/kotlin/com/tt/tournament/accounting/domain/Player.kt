@@ -1,0 +1,26 @@
+package com.tt.tournament.accounting.domain
+
+data class Player(val id: Number, val firstName: String, val lastName: String, val club: String, val clubCity: String?, var disciplines: MutableList<Discipline>){
+    fun addDisciplines(disciplinesToAdd: List<Discipline>): Player {
+        for (disciplineToAdd in disciplinesToAdd) {
+            this.disciplines.add(disciplineToAdd)
+        }
+        return this
+    }
+
+    fun name() : String {
+        return String.format("%s %s", firstName, lastName)
+    }
+
+    fun totalAmount() : Int {
+        return disciplines.sumOf { it.price }
+    }
+
+    fun isFullyPaid() : Boolean {
+        return disciplines.all { it.paid.toInt() == 1 }
+    }
+
+    fun disciplinesAsString() : String {
+        return disciplines.joinToString(", ") { it.name }
+    }
+}

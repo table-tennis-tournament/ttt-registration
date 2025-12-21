@@ -177,3 +177,5 @@ README.html
 .exercism
 
 *.env
+
+local.env
