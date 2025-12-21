@@ -107,11 +107,13 @@
         <p>Was möchtest du tun?</p>
         <div class="nav-links">
             <a th:href="@{/players}">Alle Spieler</a>
-            <a th:href="@{/import}">Importiere Turnier Daten</a>
-            <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
-            <button id="automaticSundayImportBtn" class="automatic-import-sunday-button">Aktualisiere Sonntag</button>
+            <button id="automaticTournamentImportBtn" class="automatic-import-saturday-button">Aktualisiere Turnier</button>
             <a th:href="@{/saturday-report}">Samstag Quittungen</a>
             <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
+            <a th:href="@{/import}">Importiere Turnier XML</a>
+            <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
+            <button id="automaticSundayImportBtn" class="automatic-import-sunday-button">Aktualisiere Sonntag</button>
+
         </div>
         <div id="message" class="message"></div>
     </div>
@@ -120,6 +122,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const automaticSaturdayImportBtn = document.getElementById('automaticSaturdayImportBtn');
             const automaticSundayImportBtn = document.getElementById('automaticSundayImportBtn');
+            const automaticTournamentImportBtn = document.getElementById('automaticTournamentImportBtn');
             const messageDiv = document.getElementById('message');
 
             // Get CSRF token
@@ -131,6 +134,7 @@
                 // Disable both buttons and show loading message
                 automaticSaturdayImportBtn.disabled = true;
                 automaticSundayImportBtn.disabled = true;
+                automaticTournamentImportBtn.disabled = true;
                 const originalText = button.textContent;
                 button.textContent = loadingText;
                 messageDiv.style.display = 'none';
@@ -187,9 +191,19 @@
                     // Re-enable buttons
                     automaticSaturdayImportBtn.disabled = false;
                     automaticSundayImportBtn.disabled = false;
+                    automaticTournamentImportBtn.disabled = false;
                     button.textContent = originalText;
                 }
             }
+
+            automaticTournamentImportBtn.addEventListener('click', async function() {
+                await handleImport(
+                    automaticTournamentImportBtn,
+                    '/import/automatic-tournament-import',
+                    'Aktualisiere Turnier',
+                    'Importiere Turnier...'
+                );
+            });
 
             // Saturday import button handler
             automaticSaturdayImportBtn.addEventListener('click', async function() {
