@@ -104,4 +104,37 @@ class GetReportScenarioTest(
         assertThat(actualMagicBytes).isEqualTo(pdfMagicBytes)
     }
 
+    @Test
+    fun `Given authenticated user when get blank receipt then returns PDF download with two discipline rows`() {
+        // given - application is running with authenticated user
+
+        // when - we request the blank receipt
+        val entity = authenticatedClient.getForEntity("/blank-receipt", ByteArray::class.java)
+
+        // then - we get a PDF file download
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(entity.body).isNotNull
+        assertThat(entity.body).isNotEmpty
+        assertThat(entity.headers.contentType.toString()).contains("application/pdf")
+        assertThat(entity.headers.contentDisposition.toString()).contains("attachment")
+        assertThat(entity.headers.contentDisposition.toString()).contains("blanko_quittung.pdf")
+
+        // verify PDF magic bytes
+        val pdfMagicBytes = "%PDF-".toByteArray()
+        val actualMagicBytes = entity.body!!.take(5).toByteArray()
+        assertThat(actualMagicBytes).isEqualTo(pdfMagicBytes)
+    }
+
+    @Test
+    fun `Given unauthenticated user when get blank receipt then redirects to login`() {
+        // given - application is running without authentication
+
+        // when - we try to request the blank receipt
+        val entity = restTemplate.getForEntity("/blank-receipt", String::class.java)
+
+        // then - we get redirected to login page
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(entity.body).contains("Login")
+    }
+
 }

@@ -38,4 +38,13 @@ class ReportingController(val reportService: ReportService) {
         return ResponseEntity.ok().headers(headers).body(pdfBytes)
     }
 
+    @GetMapping("/blank-receipt")
+    fun getBlankReceipt(): ResponseEntity<ByteArray> {
+        val pdfBytes = reportService.generateBlankReceiptBytes()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_PDF
+        headers.setContentDispositionFormData("attachment", "blanko_quittung.pdf")
+        return ResponseEntity.ok().headers(headers).body(pdfBytes)
+    }
+
 }

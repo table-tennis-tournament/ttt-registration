@@ -11,10 +11,11 @@
         .custom-table td {
             border: 1px solid #000;
             padding: 2px;
+            height: 0.65cm;
         }
 
         .margin-bottom {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .first-last-column {
@@ -79,14 +80,16 @@
         <td th:text="${discipline.name}"></td>
         <td class="first-last-column right-text-alignment">
             <img th:if="${discipline.paid == 1}" th:src="'data:image/png;base64,' + ${checkIcon}" alt="Base64 Image"/>
-            <span th:text="${discipline.price} + '€'"></span>
+            <span th:if="${discipline.price > 0}"  th:text="${discipline.price} + '€'"></span>
+            <span th:if="${discipline.price == 0}" th:text="'€'"></span>
         </td>
     </tr>
     <tr>
         <td class="first-last-column" colspan="2">Summe:</td>
         <td class="first-last-column right-text-alignment">
             <img th:if="${allPaid}" th:src="'data:image/png;base64,' + ${checkIcon}" alt="Base64 Image"/>
-            <span th:text="${sum} + '€'"></span>
+            <span th:if="${sum > 0}" th:text="${sum} + '€'"></span>
+            <span th:if="${sum == 0}" th:text="'€'"></span>
         </td>
     </tr>
     </tbody>

@@ -1,18 +1,18 @@
 package com.tt.tournament.xmlimport.application
 
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 import java.io.File
 
-@SpringBootTest
-@ActiveProfiles("test")
 class XmlParserServiceTest {
 
-    @Autowired
     private lateinit var xmlParserService: XmlParserService
+
+    @BeforeEach
+    fun setUp() {
+        xmlParserService = XmlParserService()
+    }
 
     @Test
     fun `Given valid tournament XML when parsing then return TournamentDto with competitions`() {
@@ -37,7 +37,7 @@ class XmlParserServiceTest {
 
         // then
         val senioren40Competition = result.competitions.find {
-            it.ageGroup == "Senioren 40" && it.type == "Einzel"
+            it.ageGroup.equals("Senioren 40") && it.type.equals("Einzel")
         }
         Assertions.assertThat(senioren40Competition).isNotNull
         Assertions.assertThat(senioren40Competition?.players?.players).isNotEmpty

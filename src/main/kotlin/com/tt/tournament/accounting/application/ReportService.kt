@@ -37,6 +37,11 @@ class ReportService(val playerRepository: PlayerRepository) {
         return generatePdfBytesFromHtml(resultList)
     }
 
+    fun generateBlankReceiptBytes(): ByteArray {
+        val html = parseBlankReceiptTemplate()
+        return generatePdfBytesFromHtml(listOf(html))
+    }
+
     private fun parseThymeleafTemplate(player: Player): String {
         val templateResolver = ClassLoaderTemplateResolver()
         templateResolver.suffix = ".html"
@@ -51,7 +56,7 @@ class ReportService(val playerRepository: PlayerRepository) {
         context.setVariable("disciplines", player.disciplines)
         val sum = player.disciplines.sumOf { it.price }
         val allPaid = player.disciplines.all { it.paid == 1 }
-        context.setVariable("sum", sum)
+        context.setVariable("sum", null)
         context.setVariable("allPaid", allPaid)
         return templateEngine.process("receipt", context)
     }
@@ -66,6 +71,26 @@ class ReportService(val playerRepository: PlayerRepository) {
         context.setVariable("players", players.sortedBy { it.lastName })
         context.setVariable("disciplineName", disciplineName)
         return templateEngine.process("list", context)
+    }
+
+    private fun parseBlankReceiptTemplate(): String {
+        val templateResolver = ClassLoaderTemplateResolver()
+        templateResolver.suffix = ".html"
+        templateResolver.templateMode = TemplateMode.HTML
+        val templateEngine = TemplateEngine()
+        templateEngine.setTemplateResolver(templateResolver)
+        val context = Context()
+        context.setVariable("base64Image", IMAGE_BASE_64)
+        context.setVariable("checkIcon", CHECK_ICON)
+        context.setVariable("name", "")
+        context.setVariable("club", "")
+        context.setVariable("disciplines", listOf(
+            com.tt.tournament.accounting.domain.Discipline(0, "", 0, 0),
+            com.tt.tournament.accounting.domain.Discipline(0, "", 0, 0)
+        ))
+        context.setVariable("sum", 0)
+        context.setVariable("allPaid", false)
+        return templateEngine.process("receipt", context)
     }
 
     private fun generatePdfBytesFromHtml(html: List<String>): ByteArray {

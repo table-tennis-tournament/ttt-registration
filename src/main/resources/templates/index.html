@@ -62,12 +62,6 @@
         .automatic-import-saturday-button:hover {
             background-color: #218838 !important;
         }
-        .automatic-import-sunday-button {
-            background-color: #17a2b8 !important;
-        }
-        .automatic-import-sunday-button:hover {
-            background-color: #138496 !important;
-        }
         .message {
             margin-top: 20px;
             padding: 15px;
@@ -89,6 +83,19 @@
             border: 1px solid #bee5eb;
             color: #0c5460;
         }
+        .button-group {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .button-group h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -105,17 +112,34 @@
     </div>
     <div>
         <p>Was möchtest du tun?</p>
-        <div class="nav-links">
-            <a th:href="@{/players}">Alle Spieler</a>
-            <button id="automaticTournamentImportBtn" class="automatic-import-saturday-button">Aktualisiere Turnier</button>
-            <a th:href="@{/saturday-report}">Samstag Quittungen</a>
-            <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
-            <a th:href="@{/player-lists}">Spielerlisten</a>
-            <a th:href="@{/import}">Importiere Turnier XML</a>
-            <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
-            <button id="automaticSundayImportBtn" class="automatic-import-sunday-button">Aktualisiere Sonntag</button>
 
+        <div class="button-group">
+            <h3>Kassenbuch</h3>
+            <div class="nav-links">
+                <a th:href="@{/players}">Alle Spieler</a>
+            </div>
         </div>
+
+        <div class="button-group">
+            <h3>Import</h3>
+            <div class="nav-links">
+                <button id="automaticTournamentImportBtn" class="automatic-import-saturday-button">Aktualisiere Turnier</button>
+                <a th:href="@{/import}">Importiere Turnier XML</a>
+                <button id="automaticSaturdayImportBtn" class="automatic-import-saturday-button">Aktualisiere Samstag</button>
+                <button id="automaticSundayImportBtn" class="automatic-import-saturday-button">Aktualisiere Sonntag</button>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <h3>Quittungen</h3>
+            <div class="nav-links">
+                <a th:href="@{/saturday-report}">Samstag Quittungen</a>
+                <a th:href="@{/sunday-report}">Sonntag Quittungen</a>
+                <a th:href="@{/player-lists}">Spielerlisten</a>
+                <a th:href="@{/blank-receipt}">Blanko Quittungen</a>
+            </div>
+        </div>
+
         <div id="message" class="message"></div>
     </div>
 
