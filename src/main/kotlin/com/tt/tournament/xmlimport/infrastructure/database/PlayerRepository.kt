@@ -227,6 +227,32 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
             .update()
     }
 
+    fun removePlayerFromType(playerId: Int, typeId: Int): Int {
+        val sql = """
+            DELETE FROM typeperplayer
+            WHERE typl_play_id = :playerId
+            AND typl_type_id = :typeId
+        """
+        return jdbcClient.sql(sql)
+            .param("playerId", playerId)
+            .param("typeId", typeId)
+            .update()
+    }
+
+    fun getLicenseNumbersForType(typeId: Int): List<String> {
+        val sql = """
+            SELECT p.Play_LicenseNr
+            FROM typeperplayer tp
+            JOIN player p ON tp.typl_play_id = p.Play_ID
+            WHERE tp.typl_type_id = :typeId
+            AND p.Play_LicenseNr IS NOT NULL
+        """
+        return jdbcClient.sql(sql)
+            .param("typeId", typeId)
+            .query { rs, _ -> rs.getString("Play_LicenseNr") }
+            .list()
+    }
+
     private fun mapToPlayerEntity(rs: ResultSet): PlayerEntity {
         return PlayerEntity(
             id = rs.getInt("Play_ID"),

@@ -14,5 +14,6 @@ data class ImportSummary(
     val competitionsMatched: Int,   // Competitions matched to existing types
     val competitionsCreated: Int,   // New types created for competitions
     val enrollmentsCreated: Int,    // typeperplayer records created
-    val duplicatesSkipped: Int      // Players already enrolled in type
+    val duplicatesSkipped: Int,     // Players already enrolled in type
+    val enrollmentsDeleted: Int = 0 // typeperplayer records deleted (players not in XML)
 )
