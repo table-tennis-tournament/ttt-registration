@@ -150,7 +150,8 @@ class AutomaticImportService(
             competitionsMatched = saturdaySummary.competitionsMatched + sundaySummary.competitionsMatched,
             competitionsCreated = saturdaySummary.competitionsCreated + sundaySummary.competitionsCreated,
             enrollmentsCreated = saturdaySummary.enrollmentsCreated + sundaySummary.enrollmentsCreated,
-            duplicatesSkipped = saturdaySummary.duplicatesSkipped + sundaySummary.duplicatesSkipped
+            duplicatesSkipped = saturdaySummary.duplicatesSkipped + sundaySummary.duplicatesSkipped,
+            enrollmentsDeleted = saturdaySummary.enrollmentsDeleted + sundaySummary.enrollmentsDeleted
         )
     }
 

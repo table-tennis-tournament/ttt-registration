@@ -37,6 +37,7 @@ class XmlImportService(
             var competitionsCreated = 0
             var enrollmentsCreated = 0
             var duplicatesSkipped = 0
+            var enrollmentsDeleted = 0
             val errors = mutableListOf<String>()
 
             // Track existing type IDs to distinguish matched vs created
@@ -57,10 +58,14 @@ class XmlImportService(
                     competitionsCreated++
                 }
 
+                // Collect license numbers from XML for this competition
+                val xmlLicenseNumbers = mutableSetOf<String>()
+
                 // Process players in this competition
                 val players = competition.players?.players ?: emptyList()
                 for (playerXml in players) {
                     val person = playerXml.person ?: continue
+                    xmlLicenseNumbers.add(person.licenceNr)
 
                     try {
                         // Process club first
@@ -111,6 +116,19 @@ class XmlImportService(
                         errors.add(errorMsg)
                     }
                 }
+
+                // Delete players from competition who are not in the XML
+                try {
+                    val deletedCount = removePlayersNotInXml(typeEntity.id, xmlLicenseNumbers)
+                    enrollmentsDeleted += deletedCount
+                    if (deletedCount > 0) {
+                        logger.info("Removed $deletedCount player(s) from competition '$competitionName' (not in XML)")
+                    }
+                } catch (e: Exception) {
+                    val errorMsg = "Failed to remove players from competition '$competitionName': ${e.message}"
+                    logger.error(errorMsg, e)
+                    errors.add(errorMsg)
+                }
             }
 
             val summary = ImportSummary(
@@ -120,7 +138,8 @@ class XmlImportService(
                 competitionsMatched = competitionsMatched,
                 competitionsCreated = competitionsCreated,
                 enrollmentsCreated = enrollmentsCreated,
-                duplicatesSkipped = duplicatesSkipped
+                duplicatesSkipped = duplicatesSkipped,
+                enrollmentsDeleted = enrollmentsDeleted
             )
 
             logger.info("Import completed: $summary")
@@ -214,6 +233,34 @@ class XmlImportService(
             "1" -> "m"  // männlich
             else -> null
         }
+    }
+
+    /**
+     * Remove players from a competition (typeId) who are not present in the XML import.
+     * Returns the count of deleted enrollments.
+     */
+    private fun removePlayersNotInXml(typeId: Int, xmlLicenseNumbers: Set<String>): Int {
+        // Get all license numbers currently enrolled in this type
+        val dbLicenseNumbers = playerRepository.getLicenseNumbersForType(typeId)
+
+        // Find license numbers in DB but not in XML (these need to be deleted)
+        val licenseNumbersToDelete = dbLicenseNumbers.filter { it !in xmlLicenseNumbers }
+
+        var deletedCount = 0
+        for (licenseNr in licenseNumbersToDelete) {
+            // Get player ID for this license number
+            val player = playerRepository.findByLicenseNr(licenseNr)
+            if (player != null) {
+                // Delete enrollment from typeperplayer (but keep player in player table)
+                val rowsDeleted = playerRepository.removePlayerFromType(player.id, typeId)
+                if (rowsDeleted > 0) {
+                    deletedCount++
+                    logger.debug("Removed player ${player.firstName} ${player.lastName} (${licenseNr}) from type $typeId")
+                }
+            }
+        }
+
+        return deletedCount
     }
 }
 
