@@ -78,6 +78,26 @@ class PlayerRepository(val jdbcClient: JdbcClient) {
         return resultMap
     }
 
+    fun readPlayersForAllDisciplines() : Map<String, Int> {
+        val sql = "SELECT t.Type_Name, COUNT(tp.typl_play_id) as player_count " +
+                "FROM typeperplayer tp, type t " +
+                "WHERE t.Type_ID = tp.typl_type_id " +
+                "AND t.Type_Kind = 1 " +
+                "GROUP BY t.Type_Name " +
+                "ORDER BY t.Type_Name"
+
+        val result = jdbcClient.sql(sql).query(this::mapToDisciplineCount).list()
+        val resultMap = HashMap<String, Int>()
+        for (pair in result) {
+            resultMap[pair.first] = pair.second
+        }
+        return resultMap
+    }
+
+    private fun mapToDisciplineCount(rs: java.sql.ResultSet, rowNum: Int): Pair<String, Int> {
+        return Pair(rs.getString("Type_Name"), rs.getInt("player_count"))
+    }
+
     fun readAllPlayers() : List<Player> {
         val sql = "SELECT P.Play_FirstName, P.Play_LastName,  t.Type_Name, tp.typl_paid, c.Club_Name, c.Club_AdresseOrt, t.Type_Name, t.Type_ID, t.Type_StartGebuehr, P.Play_ID, tp.typl_paid" +
                     "                FROM typeperplayer tp, player P, type t, club c " +

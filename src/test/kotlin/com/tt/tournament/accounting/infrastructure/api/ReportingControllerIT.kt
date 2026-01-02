@@ -58,4 +58,21 @@ class ReportingControllerIT(
         val actualMagicBytes = entity.body!!.take(5).toByteArray()
         assertThat(actualMagicBytes).isEqualTo(pdfMagicBytes)
     }
+
+    @Test
+    fun `should generate double lists successfully`() {
+        val entity = authenticatedClient.getForEntity<String>("/double-lists")
+
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(entity.body).isNotNull()
+        assertThat(entity.body).isNotEmpty
+        assertThat(entity.headers.contentType.toString()).contains("application/pdf")
+        assertThat(entity.headers.contentDisposition.toString()).contains("attachment")
+        assertThat(entity.headers.contentDisposition.toString()).contains("doppellisten.pdf")
+
+        // verify PDF magic bytes
+        val pdfMagicBytes = "%PDF-".toByteArray()
+        val actualMagicBytes = entity.body!!.take(5).toByteArray()
+        assertThat(actualMagicBytes).isEqualTo(pdfMagicBytes)
+    }
 }

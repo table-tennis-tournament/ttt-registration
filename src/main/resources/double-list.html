@@ -21,6 +21,7 @@
         .first-column {
             width: 10%;
         }
+
         .center-text-alignment {
             text-align: center;
         }
@@ -36,24 +37,13 @@
     <thead>
     <tr>
         <th class="first-column">Nr.</th>
-        <th>Verein</th>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Ort</th>
+        <th>Spieler 1</th>
+        <th>Spieler 2</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="player, iStat: ${players}">
-        <td class="first-column" th:text="${iStat.index + 1}"></td>
-        <td th:text="${player.club}"></td>
-        <td th:text="${player.firstName}"></td>
-        <td th:text="${player.lastName}"></td>
-        <td th:text="${player.clubCity}"></td>
-    </tr>
-    <tr th:each="i : ${#numbers.sequence( 0, 20/1)}">
-        <td class="first-column"/>
-        <td/>
-        <td/>
+    <tr th:each="i : ${#numbers.sequence(1, rowCount)}">
+        <td class="first-column" th:text="${i}"></td>
         <td/>
         <td/>
     </tr>

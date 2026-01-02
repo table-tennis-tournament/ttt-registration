@@ -47,4 +47,13 @@ class ReportingController(val reportService: ReportService) {
         return ResponseEntity.ok().headers(headers).body(pdfBytes)
     }
 
+    @GetMapping("/double-lists")
+    fun getDoubleLists(): ResponseEntity<ByteArray> {
+        val pdfBytes = reportService.generateDoubleListsBytes()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_PDF
+        headers.setContentDispositionFormData("attachment", "doppellisten.pdf")
+        return ResponseEntity.ok().headers(headers).body(pdfBytes)
+    }
+
 }

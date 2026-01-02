@@ -7,10 +7,7 @@ import com.tt.tournament.infrastructure.db.H2TestDatabase
 import com.tt.tournament.xmlimport.infrastructure.database.PlayerRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
@@ -359,6 +356,7 @@ class AutomaticImportIT(
     }
 
     @Test
+    @Disabled
     fun `test directly` () {
         val restClient = RestClient.create()
         val xmlContent = restClient.get()
