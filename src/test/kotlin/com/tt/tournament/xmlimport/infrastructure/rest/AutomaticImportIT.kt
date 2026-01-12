@@ -358,18 +358,6 @@ class AutomaticImportIT(
             .andExpect(jsonPath("$.errors[0]").value(Matchers.containsString("empty")))
     }
 
-    @Test
-    fun `test directly` () {
-        val restClient = RestClient.create()
-        val xmlContent = restClient.get()
-            .uri(URI.create("https://www.click-tt.de/cgi-bin/WebObjects/nuLigaKurierTTDE.woa/wa/tournamentExport?tournamentId=wxbpSFHJMQ9fxCdl%2B2dLH5tClATFLQ71"))
-            .retrieve()
-            .body<String>()
-
-        assertNotNull(xmlContent)
-        assertThat(xmlContent).contains("<tournament")
-    }
-
     private fun loadTestXmlFile(filename: String): String {
         val resourcePath = Paths.get("src/test/resources/$filename")
         return Files.readString(resourcePath)
