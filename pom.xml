@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.tt.tournament</groupId>
@@ -15,11 +15,10 @@
     <description>tournament registration</description>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>2.2.21</kotlin.version>
-        <flying-saucer-pdf.version>9.13.3</flying-saucer-pdf.version>
-        <testcontainers.version>1.21.3</testcontainers.version>
-        <testcontainers.version.2>2.0.2</testcontainers.version.2>
-        <wiremock.version>3.10.0</wiremock.version>
+        <kotlin.version>2.3.0</kotlin.version>
+        <flying-saucer-pdf.version>10.0.6</flying-saucer-pdf.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
+        <wiremock.version>3.13.2</wiremock.version>
     </properties>
     <dependencies>
         <dependency>
@@ -114,7 +113,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version.2}</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -132,6 +131,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-resttestclient</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-restclient</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

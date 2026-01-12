@@ -1,6 +1,5 @@
 package com.tt.tournament.accounting.infrastructure.api
 
-import com.tt.tournament.infrastructure.db.MariaDBTestDatabase
 import com.tt.tournament.infrastructure.db.TestDataCreator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -11,14 +10,13 @@ import org.springframework.boot.resttestclient.getForEntity
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
-import org.testcontainers.junit.jupiter.Testcontainers
+import org.springframework.test.context.ActiveProfiles
 import kotlin.collections.take
 import kotlin.collections.toByteArray
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
-@Testcontainers
-@Import(MariaDBTestDatabase::class)
+@ActiveProfiles("test")
 class ReportingControllerIT(
     @param:Autowired val restTemplate: TestRestTemplate,
     @param:Autowired val testDataCreator: TestDataCreator
